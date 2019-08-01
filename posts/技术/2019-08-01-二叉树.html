@@ -5,19 +5,23 @@
   
 
   
-  <title>技术 | dretrtg的站</title>
+  <title>二叉树 | dretrtg的站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="技术">
-<meta property="og:url" content="http://yoursite.com/技术/index.html">
+  <meta name="description" content="二分查找法// 非递归实现private static int search(int[] data, int l, int r, int target) {    int mid;    while(l &amp;lt; r) {        mid = (l + r) / 2;        if(data[mid] == target) {            return mid;">
+<meta name="keywords" content="数据结构与算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二叉树">
+<meta property="og:url" content="http://yoursite.com/posts/技术/2019-08-01-二叉树.html">
 <meta property="og:site_name" content="dretrtg的站">
+<meta property="og:description" content="二分查找法// 非递归实现private static int search(int[] data, int l, int r, int target) {    int mid;    while(l &amp;lt; r) {        mid = (l + r) / 2;        if(data[mid] == target) {            return mid;">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-31T08:00:23.673Z">
+<meta property="og:updated_time" content="2019-08-01T03:21:39.810Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="技术">
+<meta name="twitter:title" content="二叉树">
+<meta name="twitter:description" content="二分查找法// 非递归实现private static int search(int[] data, int l, int r, int target) {    int mid;    while(l &amp;lt; r) {        mid = (l + r) / 2;        if(data[mid] == target) {            return mid;">
   
     <link rel="alternate" href="/atom.xml" title="dretrtg的站" type="application/atom+xml">
   
@@ -62,24 +66,30 @@
   </div>
 </header>
       <div id="middlecontent" title class="global-width sidebar-right">
-        <section id="main"><article id="page-" class="article global-container article-type-page" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-二叉树" class="article global-container article-type-post" itemscope itemprop="blogPost">
   
     <header class="article-header">
       
   
     <h1 class="article-title" itemprop="name">
-      技术
+      二叉树
     </h1>
   
 
     </header>
   
   <div class="article-meta">
-    <a href="/技术/index.html" class="article-date">
-  <time datetime="2019-07-31T08:00:23.000Z" itemprop="datePublished">2019-07-31</time>
+    <a href="/posts/技术/2019-08-01-二叉树.html" class="article-date">
+  <time datetime="2019-08-01T03:16:34.000Z" itemprop="datePublished">2019-08-01</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
     
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
   </div>
   
     <span id="busuanzi_container_page_pv">
@@ -91,7 +101,111 @@
     
     <div class="article-content article-content-cloud" itemprop="articleBody">
       
-        
+        <p>二分查找法<br>// 非递归实现<br>private static int search(int[] data, int l, int r, int target) {<br>    int mid;<br>    while(l &lt; r) {<br>        mid = (l + r) / 2;<br>        if(data[mid] == target) {<br>            return mid;<br>        } else if(data[mid] &lt; target) {<br>            l = mid + 1;<br>        } else {<br>            r = mid;<br>        }<br>    }<br>    return -1;<br>}<br>// 递归实现<br>private static int searchDfs(int[] data, int l, int r, int target) {<br>    if(l &gt;= r) {<br>        return -1;<br>    }<br>    int mid = (l + r) / 2;<br>    if(target == data[mid]) {<br>        return mid;<br>    } else if(target &gt; data[mid]) {<br>        return searchDfs(data, mid + 1, r, target);<br>    } else {<br>        return searchDfs(data, l, mid, target);<br>    }<br>}</p>
+<p>#二叉树遍历<br>/**</p>
+<ul>
+<li>前序遍历 非递归实现</li>
+<li>Definition for a binary tree node.</li>
+<li>struct TreeNode {</li>
+<li>int val;</li>
+<li>TreeNode *left;</li>
+<li>TreeNode *right;</li>
+<li>TreeNode(int x) : val(x), left(NULL), right(NULL) {}</li>
+<li>};</li>
+<li>/<br>class Solution {<br>public:<br>  vector<int> preorderTraversal(TreeNode* root) {<pre><code>vector&lt;int&gt; ans;
+TreeNode* node = root;
+stack&lt;TreeNode*&gt; s;
+map&lt;TreeNode*, bool&gt; M;
+if(node != NULL) {
+    s.push(node);
+    while (!s.empty()) {
+        node = s.top();
+        if (!M[node]) {
+            ans.push_back(node-&gt;val);
+            M[node] = true;
+        }
+        if (node-&gt;left != NULL) {
+            s.push(node-&gt;left);
+            node-&gt;left = NULL;
+        } else if (node-&gt;right != NULL) {
+            s.push(node-&gt;right);
+            node-&gt;right = NULL;
+        } else {
+            s.pop();
+        }
+    }
+}
+return ans;</code></pre>  }<br>};</int></li>
+</ul>
+<p>/**</p>
+<ul>
+<li><p>中序遍历</p>
+</li>
+<li><p>Definition for a binary tree node.</p>
+</li>
+<li><p>struct TreeNode {</p>
+</li>
+<li><p>int val;</p>
+</li>
+<li><p>TreeNode *left;</p>
+</li>
+<li><p>TreeNode *right;</p>
+</li>
+<li><p>TreeNode(int x) : val(x), left(NULL), right(NULL) {}</p>
+</li>
+<li><p>};</p>
+</li>
+<li><p>/<br>class Solution {<br>public:<br>  vector<int> inorderTraversal(TreeNode* root) {</int></p>
+<pre><code>vector&lt;int&gt; ans;
+if(root != NULL) {
+    traversal(root, ans);
+}
+return ans;</code></pre><p>  }</p>
+<p>  void traversal(TreeNode* node, vector<int> &amp;ans) {</int></p>
+<pre><code>if(node-&gt;left != NULL) {
+    traversal(node-&gt;left, ans);
+}
+ans.push_back(node-&gt;val);
+if(node-&gt;right != NULL) {
+    traversal(node-&gt;right, ans);
+}</code></pre><p>  }<br>};</p>
+</li>
+</ul>
+<p>/**</p>
+<ul>
+<li><p>后序遍历</p>
+</li>
+<li><p>Definition for a binary tree node.</p>
+</li>
+<li><p>struct TreeNode {</p>
+</li>
+<li><p>int val;</p>
+</li>
+<li><p>TreeNode *left;</p>
+</li>
+<li><p>TreeNode *right;</p>
+</li>
+<li><p>TreeNode(int x) : val(x), left(NULL), right(NULL) {}</p>
+</li>
+<li><p>};</p>
+</li>
+<li><p>/<br>class Solution {<br>public:<br>  vector<int> postorderTraversal(TreeNode* root) {</int></p>
+<pre><code>vector&lt;int&gt; ans;
+if(root != NULL) {
+    traversal(root, ans);
+}
+return ans;</code></pre><p>  }</p>
+<p>  void traversal(TreeNode* node, vector<int> &amp;ans) {</int></p>
+<pre><code>if(node-&gt;left != NULL) {
+    traversal(node-&gt;left, ans);
+}
+if(node-&gt;right != NULL) {
+    traversal(node-&gt;right, ans);
+}
+ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
+</li>
+</ul>
+
       
     </div>
     
@@ -102,6 +216,20 @@
   </div>
   
     
+<nav id="article-nav">
+  <div class="article-nav-block">
+    
+  </div>
+  <div class="article-nav-block">
+    
+      <a href="/posts/技术/2019-08-01-红黑树.html" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">红黑树</div>
+        <strong class="article-nav-caption"></strong>
+      </a>
+    
+  </div>
+</nav>
+
     
 <div id="gitmentContainer"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">

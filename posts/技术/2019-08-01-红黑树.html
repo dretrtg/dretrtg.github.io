@@ -5,18 +5,23 @@
   
 
   
-  <title>dretrtg的站</title>
+  <title>红黑树 | dretrtg的站</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   
   
-  <meta property="og:type" content="website">
-<meta property="og:title" content="dretrtg的站">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="treeMap左旋//Rotate Leftprivate void rotateLeft(Entry&amp;lt;K,V&amp;gt; p) {    if (p != null) {        Entry&amp;lt;K,V&amp;gt; r = p.right;        p.right = r.left;        if (r.left != null)            r.left.paren">
+<meta name="keywords" content="数据结构与算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="红黑树">
+<meta property="og:url" content="http://yoursite.com/posts/技术/2019-08-01-红黑树.html">
 <meta property="og:site_name" content="dretrtg的站">
+<meta property="og:description" content="treeMap左旋//Rotate Leftprivate void rotateLeft(Entry&amp;lt;K,V&amp;gt; p) {    if (p != null) {        Entry&amp;lt;K,V&amp;gt; r = p.right;        p.right = r.left;        if (r.left != null)            r.left.paren">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-01T01:09:07.507Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="dretrtg的站">
+<meta name="twitter:title" content="红黑树">
+<meta name="twitter:description" content="treeMap左旋//Rotate Leftprivate void rotateLeft(Entry&amp;lt;K,V&amp;gt; p) {    if (p != null) {        Entry&amp;lt;K,V&amp;gt; r = p.right;        p.right = r.left;        if (r.left != null)            r.left.paren">
   
     <link rel="alternate" href="/atom.xml" title="dretrtg的站" type="application/atom+xml">
   
@@ -61,160 +66,13 @@
   </div>
 </header>
       <div id="middlecontent" title class="global-width sidebar-right">
-        <section id="main">
-  
-    <article id="post-二叉树" class="article global-container article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-红黑树" class="article global-container article-type-post" itemscope itemprop="blogPost">
   
     <header class="article-header">
       
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/posts/技术/2019-08-01-二叉树.html">二叉树</a>
-    </h1>
-  
-
-    </header>
-  
-  <div class="article-meta">
-    <a href="/posts/技术/2019-08-01-二叉树.html" class="article-date">
-  <time datetime="2019-08-01T03:16:34.000Z" itemprop="datePublished">2019-08-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>
-  </div>
-
-    
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
-
-  </div>
-  
-
-  <div class="article-inner">
-    
-    <div class="article-content article-content-cloud" itemprop="articleBody">
-      
-        <p>二分查找法<br>// 非递归实现<br>private static int search(int[] data, int l, int r, int target) {<br>    int mid;<br>    while(l &lt; r) {<br>        mid = (l + r) / 2;<br>        if(data[mid] == target) {<br>            return mid;<br>        } else if(data[mid] &lt; target) {<br>            l = mid + 1;<br>        } else {<br>            r = mid;<br>        }<br>    }<br>    return -1;<br>}<br>// 递归实现<br>private static int searchDfs(int[] data, int l, int r, int target) {<br>    if(l &gt;= r) {<br>        return -1;<br>    }<br>    int mid = (l + r) / 2;<br>    if(target == data[mid]) {<br>        return mid;<br>    } else if(target &gt; data[mid]) {<br>        return searchDfs(data, mid + 1, r, target);<br>    } else {<br>        return searchDfs(data, l, mid, target);<br>    }<br>}</p>
-<p>#二叉树遍历<br>/**</p>
-<ul>
-<li>前序遍历 非递归实现</li>
-<li>Definition for a binary tree node.</li>
-<li>struct TreeNode {</li>
-<li>int val;</li>
-<li>TreeNode *left;</li>
-<li>TreeNode *right;</li>
-<li>TreeNode(int x) : val(x), left(NULL), right(NULL) {}</li>
-<li>};</li>
-<li>/<br>class Solution {<br>public:<br>  vector<int> preorderTraversal(TreeNode* root) {<pre><code>vector&lt;int&gt; ans;
-TreeNode* node = root;
-stack&lt;TreeNode*&gt; s;
-map&lt;TreeNode*, bool&gt; M;
-if(node != NULL) {
-    s.push(node);
-    while (!s.empty()) {
-        node = s.top();
-        if (!M[node]) {
-            ans.push_back(node-&gt;val);
-            M[node] = true;
-        }
-        if (node-&gt;left != NULL) {
-            s.push(node-&gt;left);
-            node-&gt;left = NULL;
-        } else if (node-&gt;right != NULL) {
-            s.push(node-&gt;right);
-            node-&gt;right = NULL;
-        } else {
-            s.pop();
-        }
-    }
-}
-return ans;</code></pre>  }<br>};</int></li>
-</ul>
-<p>/**</p>
-<ul>
-<li><p>中序遍历</p>
-</li>
-<li><p>Definition for a binary tree node.</p>
-</li>
-<li><p>struct TreeNode {</p>
-</li>
-<li><p>int val;</p>
-</li>
-<li><p>TreeNode *left;</p>
-</li>
-<li><p>TreeNode *right;</p>
-</li>
-<li><p>TreeNode(int x) : val(x), left(NULL), right(NULL) {}</p>
-</li>
-<li><p>};</p>
-</li>
-<li><p>/<br>class Solution {<br>public:<br>  vector<int> inorderTraversal(TreeNode* root) {</int></p>
-<pre><code>vector&lt;int&gt; ans;
-if(root != NULL) {
-    traversal(root, ans);
-}
-return ans;</code></pre><p>  }</p>
-<p>  void traversal(TreeNode* node, vector<int> &amp;ans) {</int></p>
-<pre><code>if(node-&gt;left != NULL) {
-    traversal(node-&gt;left, ans);
-}
-ans.push_back(node-&gt;val);
-if(node-&gt;right != NULL) {
-    traversal(node-&gt;right, ans);
-}</code></pre><p>  }<br>};</p>
-</li>
-</ul>
-<p>/**</p>
-<ul>
-<li><p>后序遍历</p>
-</li>
-<li><p>Definition for a binary tree node.</p>
-</li>
-<li><p>struct TreeNode {</p>
-</li>
-<li><p>int val;</p>
-</li>
-<li><p>TreeNode *left;</p>
-</li>
-<li><p>TreeNode *right;</p>
-</li>
-<li><p>TreeNode(int x) : val(x), left(NULL), right(NULL) {}</p>
-</li>
-<li><p>};</p>
-</li>
-<li><p>/<br>class Solution {<br>public:<br>  vector<int> postorderTraversal(TreeNode* root) {</int></p>
-<pre><code>vector&lt;int&gt; ans;
-if(root != NULL) {
-    traversal(root, ans);
-}
-return ans;</code></pre><p>  }</p>
-<p>  void traversal(TreeNode* node, vector<int> &amp;ans) {</int></p>
-<pre><code>if(node-&gt;left != NULL) {
-    traversal(node-&gt;left, ans);
-}
-if(node-&gt;right != NULL) {
-    traversal(node-&gt;right, ans);
-}
-ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
-</li>
-</ul>
-
-      
-    </div>
-    
-  </div>
-  
-  
-</article>
-
-  
-    <article id="post-红黑树" class="article global-container article-type-post" itemscope itemprop="blogPost">
-  
-    <header class="article-header">
-      
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/posts/技术/2019-08-01-红黑树.html">红黑树</a>
+    <h1 class="article-title" itemprop="name">
+      红黑树
     </h1>
   
 
@@ -233,6 +91,10 @@ ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
 
   </div>
+  
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
   
 
   <div class="article-inner">
@@ -256,143 +118,55 @@ ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
       
     </div>
     
+      <footer class="article-footer">
+        完
+      </footer>
+    
   </div>
+  
+    
+<nav id="article-nav">
+  <div class="article-nav-block">
+    
+      <a href="/posts/技术/2019-08-01-二叉树.html" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption"></strong>
+        <div class="article-nav-title">
+          
+            二叉树
+          
+        </div>
+      </a>
+    
+  </div>
+  <div class="article-nav-block">
+    
+      <a href="/posts/uncategorized/2019-07-31-test.html" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">test</div>
+        <strong class="article-nav-caption"></strong>
+      </a>
+    
+  </div>
+</nav>
+
+    
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: '',
+  repo: '',
+  oauth: {
+    client_id: '',
+    client_secret: '',
+  },
+})
+gitment.render('gitmentContainer')
+</script>
+
   
   
 </article>
-
-  
-    <article id="post-test" class="article global-container article-type-post" itemscope itemprop="blogPost">
-  
-    <header class="article-header">
-      
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/posts/uncategorized/2019-07-31-test.html">test</a>
-    </h1>
-  
-
-    </header>
-  
-  <div class="article-meta">
-    <a href="/posts/uncategorized/2019-07-31-test.html" class="article-date">
-  <time datetime="2019-07-31T13:37:35.000Z" itemprop="datePublished">2019-07-31</time>
-</a>
-    
-    
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/历史/">历史</a></li></ul>
-
-  </div>
-  
-
-  <div class="article-inner">
-    
-    <div class="article-content article-content-cloud" itemprop="articleBody">
-      
-        <p>test</p>
-
-      
-    </div>
-    
-  </div>
-  
-  
-</article>
-
-  
-    <article id="post-second-commit" class="article global-container article-type-post" itemscope itemprop="blogPost">
-  
-    <header class="article-header">
-      
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/posts/编程/2019-07-31-second-commit.html">second-commit</a>
-    </h1>
-  
-
-    </header>
-  
-  <div class="article-meta">
-    <a href="/posts/编程/2019-07-31-second-commit.html" class="article-date">
-  <time datetime="2019-07-31T07:37:10.000Z" itemprop="datePublished">2019-07-31</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编程/">编程</a>
-  </div>
-
-    
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/历史/">历史</a></li></ul>
-
-  </div>
-  
-
-  <div class="article-inner">
-    
-    <div class="article-content article-content-cloud" itemprop="articleBody">
-      
-        <p>这里应该是安全的</p>
-
-      
-    </div>
-    
-  </div>
-  
-  
-</article>
-
-  
-    <article id="post-hello-world" class="article global-container article-type-post" itemscope itemprop="blogPost">
-  
-    <header class="article-header">
-      
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/posts/uncategorized/2019-07-31-hello-world.html">Hello World</a>
-    </h1>
-  
-
-    </header>
-  
-  <div class="article-meta">
-    <a href="/posts/uncategorized/2019-07-31-hello-world.html" class="article-date">
-  <time datetime="2019-07-31T03:20:44.619Z" itemprop="datePublished">2019-07-31</time>
-</a>
-    
-    
-  </div>
-  
-
-  <div class="article-inner">
-    
-    <div class="article-content article-content-cloud" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><div class="highlight-box"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="BASH"><figure class="iseeu highlight /bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure></div>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><div class="highlight-box"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="BASH"><figure class="iseeu highlight /bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure></div>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><div class="highlight-box"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="BASH"><figure class="iseeu highlight /bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure></div>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><div class="highlight-box"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" contenteditable="true"data-rel="BASH"><figure class="iseeu highlight /bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure></div>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    
-  </div>
-  
-  
-</article>
-
-  
-
-
-
 </section>
         <aside id="sidebar">
   
