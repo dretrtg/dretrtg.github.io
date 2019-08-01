@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>排序 | dretrtg的站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <meta name="description" content="1、选择排序    选择出数组中的最小元素，将它与数组的第一个元素交换位置。再从剩下的元素中选择出最小的元素，将它与数组的第二个元素交换位置。不断进行这样的操作，直到将整个数组排序。 public static void sort(int[] arr) {    for (int i = 0; i &amp;lt; arr.length; i++) {        // 寻找[i, n)区间里的最小值的">
+<meta name="keywords" content="数据结构与算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序">
+<meta property="og:url" content="http://yoursite.com/posts/技术/2019-08-01-排序.html">
+<meta property="og:site_name" content="dretrtg的站">
+<meta property="og:description" content="1、选择排序    选择出数组中的最小元素，将它与数组的第一个元素交换位置。再从剩下的元素中选择出最小的元素，将它与数组的第二个元素交换位置。不断进行这样的操作，直到将整个数组排序。 public static void sort(int[] arr) {    for (int i = 0; i &amp;lt; arr.length; i++) {        // 寻找[i, n)区间里的最小值的">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-01T07:52:07.287Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="排序">
+<meta name="twitter:description" content="1、选择排序    选择出数组中的最小元素，将它与数组的第一个元素交换位置。再从剩下的元素中选择出最小的元素，将它与数组的第二个元素交换位置。不断进行这样的操作，直到将整个数组排序。 public static void sort(int[] arr) {    for (int i = 0; i &amp;lt; arr.length; i++) {        // 寻找[i, n)区间里的最小值的">
+  
+    <link rel="alternate" href="/atom.xml" title="dretrtg的站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/default-avatar.webp">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/highlight.css">
+  <script>
+  let antiquityStorage = window.sessionStorage.getItem('antiquitySessionStorage');
+  if (antiquityStorage == '' || antiquityStorage == null) {
+    var antiquityLoader = '<div id="loaderbox"><div class="loader"><div class="load-roll"><div class="load-top"></div><div class="load-right"></div><div class="load-bottom"></div></div></div></div>';
+    document.write(antiquityLoader);
+    document.body.style.overflow = 'hidden'
+  }
+  </script>
+</head>
+</html>
+<body>
+  <div id="fullpage" class="mobile-nav-right">
+    
+      <div id="wrapper" title="图片来自网络">
+    
+    
+      <header id="header">
+  <div id="nav-toggle" class="nav-toggle"></div>
+  <div class="head-box global-width">
+    <nav class="nav-box nav-right">
+      
+        <a class="nav-item" href="/" title
+        
+        >首页</a>
+      
+        <a class="nav-item" href="/archives" title
+        
+        >归档</a>
+      
+    </nav>
+  </div>
+</header>
+      <div id="middlecontent" title class="global-width sidebar-right">
+        <section id="main"><article id="post-排序" class="article global-container article-type-post" itemscope itemprop="blogPost">
+  
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      排序
+    </h1>
+  
+
+    </header>
+  
+  <div class="article-meta">
+    <a href="/posts/技术/2019-08-01-排序.html" class="article-date">
+  <time datetime="2019-08-01T07:41:26.000Z" itemprop="datePublished">2019-08-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+    
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+
+  </div>
+  
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+  
+
+  <div class="article-inner">
+    
+    <div class="article-content article-content-cloud" itemprop="articleBody">
+      
+        <p>1、选择排序<br>    选择出数组中的最小元素，将它与数组的第一个元素交换位置。再从剩下的元素中选择出最小的元素，将它与数组的第二个元素交换位置。不断进行这样的操作，直到将整个数组排序。</p>
+<p>public static void sort(int[] arr) {<br>    for (int i = 0; i &lt; arr.length; i++) {<br>        // 寻找[i, n)区间里的最小值的索引<br>        int minIndex = i;<br>        for (int j = i + 1; j &lt; arr.length; j++) {<br>            if(arr[minIndex] &gt; arr[j]){<br>                minIndex = j;<br>            }<br>        }<br>        swap( arr , i , minIndex);<br>    }<br>}</p>
+<p>private static void swap(int[] arr, int i, int j) {<br>    int t = arr[i];<br>    arr[i] = arr[j];<br>    arr[j] = t;<br>}</p>
+<p>算法分析</p>
+<p>表现最稳定的排序算法之一，因为无论什么数据进去都是O(n2)的时间复杂度，所以用到它的时候，数据规模越小越好。唯一的好处可能就是不占用额外的内存空间了吧。理论上讲，选择排序可能也是平时排序一般人想到的最多的排序方法了吧。<br>2、插入排序<br>插入排序从左到右进行，每次都将当前元素插入到左侧已经排序的数组中，使得插入之后左部数组依然有序。</p>
+<p>第 j 元素是通过不断向左比较并交换来实现插入过程：当第 j 元素小于第 j - 1 元素，就将它们的位置交换，然后令 j 指针向左移动一个位置，不断进行以上操作。<br>public static void sort(int[] arr) {<br>    for (int i = 0; i &lt; arr.length - 1; i++) {<br>        for (int j = i + 1; j &gt; 0; j–) {<br>            if (arr[j] &lt; arr[j - 1])<br>                swap(arr, j, j - 1); // 大量的交换会消耗时间<br>            else<br>                break;<br>        }<br>    }<br>}</p>
+<p>// 改进版插入排序（减少了数组元素的操作次数）<br>public static void better_sort(int[] arr) {<br>    for (int i = 0; i &lt; arr.length; i++) {<br>        int e = arr[i];<br>        int j = i;<br>        for (; j &gt; 0; j–) {<br>            if (e &lt; arr[j - 1])<br>                arr[j] = arr[j - 1];<br>            else<br>                break;<br>        }<br>        arr[j] = e;<br>    }<br>}</p>
+<p>private static void swap(int[] arr, int i, int j) {<br>    int t = arr[i];<br>    arr[i] = arr[j];<br>    arr[j] = t;<br>}<br>算法分析</p>
+<p>插入排序在实现上，通常采用in-place排序（即只需用到O(1)的额外空间的排序），因而在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。<br>3、冒泡排序<br>通过从左到右不断交换相邻逆序的相邻元素，在一轮的交换之后，可以让未排序的元素上浮到右侧。</p>
+<p>在一轮循环中，如果没有发生交换，就说明数组已经是有序的，此时可以直接退出。<br>private static void sort(int[] arr) {<br>    for (int i = arr.length - 1; i &gt; 0; i–) { // 从最后一位开始确定<br>        boolean swapped = false;<br>        for (int j = 0; j &lt; i; j++) {<br>            if(arr[j] &gt; arr[j+1]){<br>                swapped = true;<br>                swap(arr,j,j+1);<br>            }<br>        }<br>        if(!swapped)<br>            return;<br>    }<br>}</p>
+<p>private static void swap(int[] arr, int i, int j) {<br>    int t = arr[i];<br>    arr[i] = arr[j];<br>    arr[j] = t;<br>}<br>4、希尔排序<br>先将整个待排序的记录序列分割成为若干子序列分别进行直接插入排序，具体算法描述：</p>
+<p>选择一个增量序列t1，t2，…，tk，其中ti&gt;tj，tk=1；<br>按增量序列个数k，对序列进行k 趟排序；<br>每趟排序，根据对应的增量ti，将待排序列分割成若干长度为m 的子序列，分别对各子表进行直接插入排序。仅增量因子为1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。<br>// 希尔排序<br>public static void sort(int[] arr) {<br>    int n = arr.length;<br>    for (int h = n / 2; h &gt; 0; h = h / 2) {<br>        // 内部是一个插入排序<br>        for (int i = 0; i &lt; n; i = i + h) {</p>
+<pre><code>        int e = arr[i];
+        int j = i;
+        for (; j &gt; 0; j = j - h) {
+            if (e &lt; arr[j - h])
+                arr[j] = arr[j - h];
+            else
+                break;
+        }
+        arr[j] = e;
+    }
+}</code></pre><p>}</p>
+<p>// 希尔排序2<br>public static void sort2(int[] arr) {<br>    int n = arr.length;<br>    // 计算 increment sequence: 1, 4, 13, 40, 121, 364, 1093…<br>    int h = 1;<br>    while (h &lt; n / 3) h = 3 * h + 1;</p>
+<pre><code>System.out.println(h);
+
+while (h &gt;= 1) {
+    // h-sort the array
+    for (int i = h; i &lt; n; i++) {
+
+        // 对 arr[i], arr[i-h], arr[i-2*h], arr[i-3*h]... 使用插入排序
+        int e = arr[i];
+        int j = i;
+        for (; j &gt;= h &amp;&amp; e &lt; arr[j - h]; j -= h)
+            arr[j] = arr[j - h];
+        arr[j] = e;
+    }
+
+    h /= 3;
+}</code></pre><p>}<br>算法分析</p>
+<p>对于大规模的数组，插入排序很慢，因为它只能交换相邻的元素，每次只能将逆序数量减少 1。</p>
+<p>希尔排序的出现就是为了改进插入排序的这种局限性，它通过交换不相邻的元素，每次可以将逆序数量减少大于 1。</p>
+<p>希尔排序使用插入排序对间隔 h 的序列进行排序。通过不断减小 h，最后令 h=1，就可以使得整个数组是有序的。<br>5、归并排序<br>归并排序的思想是将数组分成两部分，分别进行排序，然后归并起来。把长度为n的输入序列分成两个长度为n/2的子序列；对这两个子序列分别采用归并排序；将两个排序好的子序列合并成一个最终的排序序列。<br>private static void sort(int[] arr) {<br>    __MergeSort(arr, 0, arr.length - 1);<br>}</p>
+<p>private static void __MergeSort(int[] arr, int l, int r) {<br>    if (l &gt;= r)<br>        return;<br>    int mid = (l + r) / 2;<br>    __MergeSort(arr, l, mid);<br>    __MergeSort(arr, mid + 1, r);<br>    merge(arr, l, mid, r);<br>}</p>
+<p>// 将arr[l…mid]和arr[mid+1…r]两部分进行归并<br>private static void merge(int[] arr, int l, int mid, int r) {<br>    int[] aux = Arrays.copyOfRange(arr, l, r + 1);</p>
+<pre><code>// 初始化，i指向左半部分的起始索引位置l；j指向右半部分起始索引位置mid+1
+int i = l, j = mid + 1;
+for (int k = l; k &lt;= r; k++) {
+    if (i &gt; mid) {  // 如果左半部分元素已经全部处理完毕
+        arr[k] = aux[j - l];
+        j++;
+    } else if (j &gt; r) {   // 如果右半部分元素已经全部处理完毕
+        arr[k] = aux[i - l];
+        i++;
+    } else if (aux[i - l] &lt; aux[j - l]) {  // 左半部分所指元素 &lt; 右半部分所指元素
+        arr[k] = aux[i - l];
+        i++;
+    } else {  // 左半部分所指元素 &gt;= 右半部分所指元素
+        arr[k] = aux[j - l];
+        j++;
+    }
+}</code></pre><p>}</p>
+<p>private static void sort(int[] arr) {<br>    int N = arr.length;<br>    int[] aux = new int[N];<br>    for (int sz = 1; sz &lt; N; sz += sz)<br>        for (int i = 0; i + sz &lt; N; i += sz + sz)<br>            merge(arr, i, i + sz - 1, Math.min(i + sz + sz - 1, N - 1));<br>}<br>6、快速排序<br>（1）普通快速排序<br>// 递归使用快速排序,对arr[l…r]的范围进行排序<br>public static void QuickSort(int[] arr,int l,int r){<br>    if(l&gt;=r)<br>        return;<br>    int p = partition(arr,l,r);<br>    QuickSort(arr,l,p-1);<br>    QuickSort(arr,p+1,r);<br>}</p>
+<p>// 将数组通过p分割成两部分<br>// 对arr[l…r]部分进行partition操作<br>// 返回p, 使得arr[l…p-1] &lt; arr[p] ; arr[p+1…r] &gt; arr[p]<br>public static int partition(int[] arr, int l, int r) {<br>    swap(arr, l, (int) (Math.random() % (r - l + 1)) + l);  // 加入这一行变成随机快速排序</p>
+<pre><code>int v = arr[l];
+int j = l;
+for(int i = j +1;i&lt;=r;i++){
+    if(arr[i] &lt; v){
+        j++;
+        swap(arr,i,j);
+    }
+}
+swap(arr,l,j);
+return j;</code></pre><p>}</p>
+<p>public static void swap(int[] arr,int i,int j) {<br>    int temp = arr[i];<br>    arr[i] = arr[j];<br>    arr[j] = temp;<br>}<br>快速排序是原地排序，不需要辅助数组，但是递归调用需要辅助栈。</p>
+<p>快速排序最好的情况下是每次都正好能将数组对半分，这样递归调用次数才是最少的。这种情况下比较次数为 CN=2CN/2+N，复杂度为 O(NlogN)。</p>
+<p>最坏的情况下，第一次从最小的元素切分，第二次从第二小的元素切分，如此这般。因此最坏的情况下需要比较 N2/2。为了防止数组最开始就是有序的，在进行快速排序时需要随机打乱数组。<br>（2）双路快速排序<br>// 双路快速排序的partition<br>// 返回p, 使得arr[l…p-1] &lt; arr[p] ; arr[p+1…r] &gt; arr[p]<br>private static int partition(int[] arr, int l, int r) {</p>
+<pre><code>// 随机在arr[l...r]的范围中, 选择一个数值作为标定点pivot
+// swap(arr, l, (int) (Math.random() % (r - l + 1)) + l);
+
+int v = arr[l];
+
+// arr[l+1...i) &lt;= v; arr(j...r] &gt;= v
+int i = l + 1, j = r;
+while (true) {
+    // 注意这里的边界, arr[i].compareTo(v) &lt; 0, 不能是arr[i].compareTo(v) &lt;= 0
+    // 思考一下为什么?
+    while (i &lt;= r &amp;&amp; arr[i] &lt; v)
+        i++;
+
+    // 注意这里的边界, arr[j].compareTo(v) &gt; 0, 不能是arr[j].compareTo(v) &gt;= 0
+    // 思考一下为什么?
+    while (j &gt;= l + 1 &amp;&amp; arr[j] &gt; v)
+        j--;
+
+    // 对于上面的两个边界的设定, 有的同学在课程的问答区有很好的回答:)
+    // 大家可以参考: http://coding.imooc.com/learn/questiondetail/4920.html
+    if (i &gt; j)
+        break;
+
+    swap(arr, i, j);
+    i++;
+    j--;
+}
+
+swap(arr, l, j);
+
+return j;</code></pre><p>}</p>
+<p>// 递归使用快速排序,对arr[l…r]的范围进行排序<br>private static void QuickSort2Ways(int[] arr, int l, int r) {<br>    // 对于小规模数组, 使用插入排序<br>    if (l &gt;= r) return;<br>    int p = partition(arr, l, r);<br>    QuickSort2Ways(arr, l, p - 1);<br>    QuickSort2Ways(arr, p + 1, r);<br>}<br>（3）三路快速排序<br>// 递归使用快速排序,对arr[l…r]的范围进行排序<br>private static void QuickSort3Ways(int[] arr, int l, int r){</p>
+<pre><code>// 随机在arr[l...r]的范围中, 选择一个数值作为标定点pivot
+swap( arr, l, (int)(Math.random()*(r-l+1)) + l );
+
+int v = arr[l];
+
+int lt = l;     // arr[l+1...lt] &lt; v
+int gt = r + 1; // arr[gt...r] &gt; v
+int i = l+1;    // arr[lt+1...i) == v
+while( i &lt; gt ){
+    if( arr[i] &lt; v){
+        swap( arr, i, lt+1);
+        i ++;
+        lt ++;
+    }
+    else if( arr[i] &gt; v ){
+        swap( arr, i, gt-1);
+        gt --;
+    }
+    else{ // arr[i] == v
+        i ++;
+    }
+}
+swap( arr, l, lt );
+
+QuickSort3Ways(arr, l, lt-1);
+QuickSort3Ways(arr, gt, r);</code></pre><p>}<br>7、堆排序<br>// 不使用一个额外的最大堆, 直接在原数组上进行原地的堆排序<br>public class HeapSort {</p>
+<pre><code>// 对整个arr数组使用HeapSort1排序
+// HeapSort1, 将所有的元素依次添加到堆中, 在将所有元素从堆中依次取出来, 即完成了排序
+// 无论是创建堆的过程, 还是从堆中依次取出元素的过程, 时间复杂度均为O(nlogn)
+// 整个堆排序的整体时间复杂度为O(nlogn)
+public static void sort1(Comparable[] arr){
+
+    int n = arr.length;
+    MaxHeap&lt;Comparable&gt; maxHeap = new MaxHeap&lt;Comparable&gt;(n);
+    for( int i = 0 ; i &lt; n ; i ++ )
+        maxHeap.insert(arr[i]);
+
+    for( int i = n-1 ; i &gt;= 0 ; i -- )
+        arr[i] = maxHeap.extractMax();
+}
+
+
+// 只通过shiftDown操作进行排序
+public static void sort2(Comparable[] arr){
+    int n = arr.length;
+
+    // 注意，此时我们的堆是从0开始索引的
+    // 从(最后一个元素的索引-1)/2开始
+    // 最后一个元素的索引 = n-1
+    for( int i = (n-1-1)/2 ; i &gt;= 0 ; i -- )
+        shiftDown2(arr, n, i);
+
+    for( int i = n-1; i &gt; 0 ; i-- ){ // 这个的目的是让序列从小到大排序
+        swap( arr, 0, i);
+        shiftDown2(arr, i, 0);
+    }
+}
+
+// 交换堆中索引为i和j的两个元素
+private static void swap(Object[] arr, int i, int j){
+    Object t = arr[i];
+    arr[i] = arr[j];
+    arr[j] = t;
+}
+
+// 原始的shiftDown过程
+private static void shiftDown(Comparable[] arr, int n, int k){
+    while( 2*k+1 &lt; n ){
+        int j = 2*k+1;
+        if( j+1 &lt; n &amp;&amp; arr[j+1].compareTo(arr[j]) &gt; 0 )
+            j += 1;
+
+        if( arr[k].compareTo(arr[j]) &gt;= 0 )break;
+
+        swap( arr, k, j);
+        k = j;
+    }
+}
+
+// 优化的shiftDown过程, 使用赋值的方式取代不断的swap,
+// 该优化思想和我们之前对插入排序进行优化的思路是一致的
+private static void shiftDown2(Comparable[] arr, int n, int k){
+
+    Comparable e = arr[k];
+    while( 2*k+1 &lt; n ){
+        int j = 2*k+1;
+        if( j+1 &lt; n &amp;&amp; arr[j+1].compareTo(arr[j]) &gt; 0 )
+            j += 1;
+
+        if( e.compareTo(arr[j]) &gt;= 0 )
+            break;
+
+        arr[k] = arr[j];
+        k = j;
+    }
+
+    arr[k] = e;
+}
+
+// 测试 HeapSort
+public static void main(String[] args) {
+    Integer[] arr = {10, 91, 8, 7, 6, 5, 4, 3, 2, 1};
+    HeapSort.sort2(arr);
+    PrintHelper.printArray(arr);
+}</code></pre><p>}<br>8、基数排序<br>         平均时间复杂度        原地排序    额外空间    稳定排序<br>插入排序    O(n^2)               √            O(1)        √<br>归并排序    O(nlogn)           ×            O(n)        √<br>快速排序    O(nlogn)           √            O(logn)        ×<br>堆排序        O(nlogn)           √            O(1)        ×</p>
+
+      
+    </div>
+    
+      <footer class="article-footer">
+        完
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  <div class="article-nav-block">
+    
+  </div>
+  <div class="article-nav-block">
+    
+      <a href="/posts/技术/2019-08-01-二叉树.html" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">二叉树</div>
+        <strong class="article-nav-caption"></strong>
+      </a>
+    
+  </div>
+</nav>
+
+    
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: '',
+  repo: '',
+  oauth: {
+    client_id: '',
+    client_secret: '',
+  },
+})
+gitment.render('gitmentContainer')
+</script>
+
+  
+  
+</article>
+</section>
+        <aside id="sidebar">
+  
+    <div class="widget-box">
+  <div class="avatar-box">
+    <img class="avatar" src="/images/default-avatar.webp" title="图片来自网络"></img>
+    <h3 class="avatar-name">
+      
+        天佑昨日
+      
+    </h3>
+    <p class="avatar-slogan">
+      明日不可求 幸得昨日来
+    </p>
+  </div>
+</div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/历史/" style="font-size: 10px;">历史</a> <a href="/tags/数据结构与算法/" style="font-size: 20px;">数据结构与算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/posts/技术/2019-08-01-排序.html">排序</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-01-二叉树.html">二叉树</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-01-红黑树.html">红黑树</a>
+          </li>
+        
+          <li>
+            <a href="/posts/uncategorized/2019-07-31-test.html">test</a>
+          </li>
+        
+          <li>
+            <a href="/posts/编程/2019-07-31-second-commit.html">second-commit</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+      <div class="widget-box">
+    <h3 class="widget-title">友链</h3>
+    <div class="widget">
+      
+        <a style="display: block;" href="https://dretrtg.github.io/" title target='_blank'
+        >dretrtg</a>
+      
+    </div>
+  </div>
+
+  
+</aside>
+      </div>
+      <footer id="footer">
+  <div class="foot-box global-width">
+    &copy; 2019 dretrtg &nbsp;&nbsp;
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    &nbsp;|&nbsp;主题 <a href="https://github.com/yiluyanxia/hexo-theme-antiquity">antiquity</a>
+    <br>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">不蒜子告之   阁下是第<span id="busuanzi_value_site_pv"></span>个访客</span>
+  </div>
+</footer>
+      <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script>
+if (!window.jQuery) {
+var script = document.createElement('script');
+script.src = "/js/jquery-2.0.3.min.js";
+document.body.write(script);
+}
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+    </div>
+    <nav id="mobile-nav" class="mobile-nav-box">
+  <div class="mobile-nav-img mobile-nav-top"></div>
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+  <div class="mobile-nav-img  mobile-nav-bottom"></div>
+</nav>    
+  </div>
+</body>
+</html>

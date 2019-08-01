@@ -142,6 +142,8 @@ a:hover {
 
 img {
   vertical-align: top;
+  margin-left: 20px;
+  margin-bottom: 15px;
 }
 
 a img {
@@ -433,11 +435,22 @@ html, body, #fullpage{
   border-radius: 100%;
 }
 .avatar-name {
-  writing-mode: vertical-lr
+  writing-mode: vertical-lr;
+  color: gray;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: 1000;
+  padding-right: 20px;
+  margin-bottom: 15px;
 }
 .avatar-slogan {
-  writing-mode: vertical-lr;
+  writing-mode: horizontal-tb;
   max-height: 200px;
+  position: absolute;
+  bottom: 15px;
+  font-family: sans-serif;
+  margin-left: 17px;
+  color: darkgrey;
 }
 .global-container {
   box-shadow: 1px 2px 3px #ddd;
