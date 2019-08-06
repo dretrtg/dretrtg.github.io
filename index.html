@@ -63,6 +63,448 @@
       <div id="middlecontent" title class="global-width sidebar-right">
         <section id="main">
   
+    <article id="post-Java并发编程" class="article global-container article-type-post" itemscope itemprop="blogPost">
+  
+    <header class="article-header">
+      
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/posts/技术/2019-08-06-Java并发编程.html">Java并发编程</a>
+    </h1>
+  
+
+    </header>
+  
+  <div class="article-meta">
+    <a href="/posts/技术/2019-08-06-Java并发编程.html" class="article-date">
+  <time datetime="2019-08-06T07:12:40.000Z" itemprop="datePublished">2019-08-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+    
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+  </div>
+  
+
+  <div class="article-inner">
+    
+    <div class="article-content article-content-cloud" itemprop="articleBody">
+      
+        <p>一、并发编程<br>1、线程状态转换<br>    新建（New）<br>        创建后尚未启动。</p>
+<pre><code>可运行（Runnable）
+    可能正在运行，也可能正在等待 CPU 时间片。
+    包含了操作系统线程状态中的 运行（Running ） 和 就绪（Ready）。
+
+阻塞（Blocking）
+    这个状态下，是在多个线程有同步操作的场景，比如正在等待另一个线程的 synchronized 块的执行释放，或者可重入的 synchronized 块里别人调用 wait() 方法，也就是线程在等待进入临界区。
+    阻塞可以分为：等待阻塞，同步阻塞，其他阻塞
+
+无限期等待（Waiting）
+    等待其它线程显式地唤醒，否则不会被分配 CPU 时间片。
+
+限期等待（Timed Waiting）
+    无需等待其它线程显式地唤醒，在一定时间之后会被系统自动唤醒。
+    调用 Thread.sleep() 方法使线程进入限期等待状态时，常常用 “使一个线程睡眠” 进行描述。
+    调用 Object.wait() 方法使线程进入限期等待或者无限期等待时，常常用 “挂起一个线程” 进行描述。
+    睡眠和挂起是用来描述行为，而阻塞和等待用来描述状态。
+    阻塞和等待的区别在于，阻塞是被动的，它是在等待获取一个排它锁。而等待是主动的，通过调用 Thread.sleep() 和 Object.wait() 等方法进入。
+
+死亡（Terminated）
+    线程因为 run 方法正常退出而自然死亡
+    因为一个没有捕获的异常终止了 run 方法而意外死亡</code></pre><p>2、Java实现多线程的方式及三种方式的区别<br>    有三种使用线程的方法<br>        实现Runnable接口；<br>        实现Callable接口；<br>        继承Thread类。<br>    实现 Runnable 和 Callable 接口的类只能当做一个可以在线程中运行的任务，不是真正意义上的线程，因此最后还需要通过 Thread 来调用。可以说任务是通过线程驱动从而执行的。</p>
+<pre><code>实现Runnable接口：
+    需要实现run()方法；通过Thread调用start（）方法启动线程。
+
+    public class MyRunnable implements Runnable {
+        public void run() {
+            // ...
+        }
+    }
+
+    public static void main(String[] args) {
+        MyRunnable instance = new MyRunnable();
+        Thread thread = new Thread(instance);
+        thread.start();
+    }
+
+实现Callable接口：
+    与 Runnable 相比，Callable 可以有返回值，返回值通过 FutureTask 进行封装。
+
+    public class MyCallable implements Callable&lt;Integer&gt; {
+        public Integer call() {
+            return 123;
+        }
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        MyCallable mc = new MyCallable();
+        FutureTask&lt;Integer&gt; ft = new FutureTask&lt;&gt;(mc);
+        Thread thread = new Thread(ft);
+        thread.start();
+        System.out.println(ft.get());
+    }
+
+继承Thread类:
+    同样也是需要实现 run() 方法，因为 Thread 类也实现了 Runable 接口。
+
+    public class MyThread extends Thread {
+        public void run() {
+        // ...
+        }
+    }
+    public static void main(String[] args) {
+        MyThread mt = new MyThread();
+        mt.start();
+    }
+
+实现接口 VS 继承 Thread
+    实现接口会更好一些，因为：
+        Java 不支持多重继承，因此继承了 Thread 类就无法继承其它类，但是可以实现多个接口；
+        类可能只要求可执行就行，继承整个 Thread 类开销过大。
+
+三种方式的区别
+    实现 Runnable 接口可以避免 Java 单继承特性而带来的局限；增强程序的健壮性，代码能够被多个线程共享，代码与数据是独立的；适合多个相同程序代码的线程区处理同一资源的情况。
+    继承 Thread 类和实现 Runnable 方法启动线程都是使用 start() 方法，然后 JVM 虚拟机将此线程放到就绪队列中，如果有处理机可用，则执行 run() 方法。
+    实现 Callable 接口要实现 call() 方法，并且线程执行完毕后会有返回值。其他的两种都是重写 run() 方法，没有返回值。</code></pre><p>3、基础线程机制<br>    Executor<br>    Executor 管理多个异步任务的执行，而无需程序员显式地管理线程的生命周期。这里的异步是指多个任务的执行互不干扰，不需要进行同步操作。<br>    主要有三种 Executor：<br>        CachedThreadPool：一个任务创建一个线程；<br>        FixedThreadPool：所有任务只能使用固定大小的线程；<br>        SingleThreadExecutor：相当于大小为 1 的 FixedThreadPool。</p>
+<pre><code>为什么引入Executor线程池框架？
+    new Thread() 的缺点
+        每次 new Thread() 耗费性能
+        调用 new Thread() 创建的线程缺乏管理，被称为野线程，而且可以无限制创建，之间相互竞争，会导致过多占用系统资源导致系统瘫痪。
+        不利于扩展，比如如定时执行、定期执行、线程中断
+    采用线程池的优点
+        重用存在的线程，减少对象创建、消亡的开销，性能佳
+        可有效控制最大并发线程数，提高系统资源的使用率，同时避免过多资源竞争，避免堵塞
+        提供定时执行、定期执行、单线程、并发数控制等功能
+
+Daemon（守护线程）
+Java 中有两类线程：User Thread (用户线程)、Daemon Thread (守护线程)
+用户线程即运行在前台的线程，而守护线程是运行在后台的线程。
+
+sleep()
+    Thread.sleep(millisec) 方法会休眠当前正在执行的线程，millisec 单位为毫秒。
+    sleep() 可能会抛出 InterruptedException，因为异常不能跨线程传播回 main() 中，因此必须在本地进行处理。线程中抛出的其它异常也同样需要在本地进行处理。
+
+    public void run() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+yield（）
+对静态方法 Thread.yield() 的调用声明了当前线程已经完成了生命周期中最重要的部分，可以切换给其它线程来执行。该方法只是对线程调度器的一个建议，而且也只是建议具有相同优先级的其它线程可以运行。
+
+public void run() {
+    Thread.yield();
+}
+
+线程阻塞
+    线程可以阻塞于四种状态：
+        当线程执行 Thread.sleep() 时，它一直阻塞到指定的毫秒时间之后，或者阻塞被另一个线程打断；
+        当线程碰到一条 wait() 语句时，它会一直阻塞到接到通知 notify()、被中断或经过了指定毫秒时间为止（若制定了超时值的话）
+        线程阻塞与不同 I/O 的方式有多种。常见的一种方式是 InputStream 的 read() 方法，该方法一直阻塞到从流中读取一个字节的数据为止，它可以无限阻塞，因此不能指定超时时间；
+        线程也可以阻塞等待获取某个对象锁的排他性访问权限（即等待获得 synchronized 语句必须的锁时阻塞）。
+
+    注意，并非所有的阻塞状态都是可中断的，以上阻塞状态的前两种可以被中断，后两种不会对中断做出反应</code></pre><p>4、中断<br>    InterruptedException<br>        通过调用一个线程的 interrupt() 来中断该线程，如果该线程处于阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I/O 阻塞和 synchronized 锁阻塞。</p>
+<pre><code>    对于以下代码，在 main() 中启动一个线程之后再中断它，由于线程中调用了 Thread.sleep() 方法，因此会抛出一个 InterruptedException，从而提前结束线程，不执行之后的语句。
+
+    public class InterruptExample {
+        private static class MyThread1 extends Thread {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                    System.out.println(&quot;Thread run&quot;);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread1 = new MyThread1();
+        thread1.start();
+        thread1.interrupt();
+        System.out.println(&quot;Main run&quot;);
+    }//输出Main run
+
+interrupted()
+    如果一个线程的 run() 方法执行一个无限循环，并且没有执行 sleep() 等会抛出 InterruptedException 的操作，那么调用线程的 interrupt() 方法就无法使线程提前结束。
+    但是调用 interrupt() 方法会设置线程的中断标记，此时调用 interrupted() 方法会返回 true。因此可以在循环体中使用 interrupted() 方法来判断线程是否处于中断状态，从而提前结束线程。
+
+    public class InterruptExample {
+        private static class MyThread2 extends Thread {
+            @Override
+            public void run() {
+                while (!interrupted()) {
+                // ..
+                }
+            System.out.println(&quot;Thread end&quot;);
+            }
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread2 = new MyThread2();
+        thread2.start();
+        thread2.interrupt();
+    }//输出Thread end</code></pre><p>5、互斥同步<br>    Java 提供了两种锁机制来控制多个线程对共享资源的互斥访问，第一个是 JVM 实现的 synchronized，而另一个是 JDK 实现的 ReentrantLock。</p>
+<pre><code>synchronized
+(1) 同步一个代码块
+
+    public void func() {
+        synchronized (this) {
+        // ...
+        }
+    }
+
+它只作用于同一个对象，如果调用两个对象上的同步代码块，就不会进行同步。
+对于以下代码，使用 ExecutorService 执行了两个线程，由于调用的是同一个对象的同步代码块，因此这两个线程会进行同步，当一个线程进入同步语句块时，另一个线程就必须等待。
+
+public class SynchronizedExample {
+    public void func1() {
+        synchronized (this) {
+            for (int i = 0; i &lt; 10; i++) {
+                System.out.print(i + &quot; &quot;);
+            }
+        }
+    }
+}
+
+public static void main(String[] args) {
+    SynchronizedExample e1 = new SynchronizedExample();
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    executorService.execute(() -&gt; e1.func1());
+    executorService.execute(() -&gt; e1.func1());
+}//0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+
+对于以下代码，两个线程调用了不同对象的同步代码块，因此这两个线程就不需要同步。从输出结果可以看出，两个线程交叉执行。
+
+public static void main(String[] args) {
+    SynchronizedExample e1 = new SynchronizedExample();
+    SynchronizedExample e2 = new SynchronizedExample();
+    ExecutorService executorService = Executors.newCachedThreadPool();
+    executorService.execute(() -&gt; e1.func1());
+    executorService.execute(() -&gt; e2.func1());
+}//0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9
+
+（2）同步一个方法
+
+    public synchronized void func () {
+        // ...
+    }
+
+（3）同步一个类
+
+    public void func() {
+        synchronized (SynchronizedExample.class) {
+        // ...
+        }
+    }
+
+    作用于整个类，也就是说两个线程调用同一个类的不同对象上的这种同步语句，也会进行同步。
+
+    public class SynchronizedExample {
+        public void func2() {
+            synchronized (SynchronizedExample.class) {
+                for (int i = 0; i &lt; 10; i++) {
+                    System.out.print(i + &quot; &quot;);
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SynchronizedExample e1 = new SynchronizedExample();
+        SynchronizedExample e2 = new SynchronizedExample();
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.execute(() -&gt; e1.func2());
+        executorService.execute(() -&gt; e2.func2());
+    }//0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+
+（4）同步一个静态方法
+    非静态同步函数的锁是：this
+    静态的同步函数的锁是：字节码对象
+
+ReentrantLock
+    重入锁（ReentrantLock）是一种递归无阻塞的同步机制。
+
+    public class LockExample {
+        private Lock lock = new ReentrantLock();
+        public void func() {
+            lock.lock();
+            try {
+                for (int i = 0; i &lt; 10; i++) {
+                    System.out.print(i + &quot; &quot;);
+                }
+            } finally {
+                lock.unlock(); // 确保释放锁，从而避免发生死锁。
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        LockExample lockExample = new LockExample();
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.execute(() -&gt; lockExample.func());
+        executorService.execute(() -&gt; lockExample.func());
+    }//0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+
+
+    ReentrantLock 是 java.util.concurrent（J.U.C）包中的锁，相比于 synchronized，它多了以下高级功能：
+        1. 等待可中断
+        当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。
+        2. 可实现公平锁
+        公平锁是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁。
+        synchronized 中的锁是非公平的，ReentrantLock 默认情况下也是非公平的，但可以通过带布尔值的构造函数要求使用公平锁。
+        3. 锁绑定多个条件
+        一个 ReentrantLock 对象可以同时绑定多个 Condition 对象。
+
+    synchronized 和 ReentrantLock 比较
+        1. 锁的实现
+        synchronized 是 JVM 实现的，而 ReentrantLock 是 JDK 实现的。
+        2. 性能
+        新版本 Java 对 synchronized 进行了很多优化，例如自旋锁等。目前来看它和 ReentrantLock 的性能基本持平了，因此性能因素不再是选择 ReentrantLock 的理由。synchronized 有更大的性能优化空间，应该优先考虑 synchronized。
+        3. 功能
+        ReentrantLock 多了一些高级功能。
+        4. 使用选择
+        除非需要使用 ReentrantLock 的高级功能，否则优先使用 synchronized。这是因为 synchronized 是 JVM 实现的一种锁机制，JVM 原生地支持它，而 ReentrantLock 不是所有的 JDK 版本都支持。并且使用 synchronized 不用担心没有释放锁而导致死锁问题，因为 JVM 会确保锁的释放。
+
+    synchronized与lock的区别，使用场景。看过synchronized的源码没？
+        （用法）synchronized（隐式锁）：在需要同步的对象中加入此控制，synchronized 可以加在方法上，也可以加在特定代码块中，括号中表示需要锁的对象。
+        （用法）lock（显示锁）：需要显示指定起始位置和终止位置。一般使用 ReentrantLock 类做为锁，多个线程中必须要使用一个 ReentrantLock 类做为对象才能保证锁的生效。且在加锁和解锁处需要通过 lock() 和 unlock() 显示指出。所以一般会在 finally 块中写 unlock() 以防死锁。
+        （性能）synchronized 是托管给 JVM 执行的，而 lock 是 Java 写的控制锁的代码。在 Java1.5 中，synchronize 是性能低效的。因为这是一个重量级操作，需要调用操作接口，导致有可能加锁消耗的系统时间比加锁以外的操作还多。相比之下使用 Java 提供的 Lock 对象，性能更高一些。但是到了 Java1.6 ，发生了变化。synchronize 在语义上很清晰，可以进行很多优化，有适应自旋，锁消除，锁粗化，轻量级锁，偏向锁等等。导致 在 Java1.6 上 synchronize 的性能并不比 Lock 差。
+        （机制）synchronized 原始采用的是 CPU 悲观锁机制，即线程获得的是独占锁。独占锁意味着其他线程只能依靠阻塞来等待线程释放锁。Lock 用的是乐观锁方式。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。乐观锁实现的机制就是 CAS 操作（Compare and Swap）。
+
+    CAS（compare and swap）
+        是一种对内存中的共享数据进行操作的特殊指令。
+        操作过程：
+            首先，CPU 会将内存中将要被更改的数据与期望的值做比较。
+            然后，当这两个值相等时，CPU 才会将内存中的数值替换为新的值。否则便不做操作。
+            最后，CPU 会将旧的数值返回。
+
+    什么是乐观锁和悲观锁
+        为什么需要锁（并发控制）
+            在多用户环境中，在同一时间可能会有多个用户更新相同的记录，这会产生冲突。这就是著名的并发性问题。
+            典型的冲突有：
+                丢失更新：一个事务的更新覆盖了其它事务的更新结果，就是所谓的更新丢失。例如：用户 A 把值从 6 改为 2，用户 B 把值从 2 改为 6，则用户 A 丢失了他的更新。
+                脏读：当一个事务读取其它完成一半事务的记录时，就会发生脏读取。例如：用户 A,B 看到的值都是6，用户 B 把值改为 2，用户 A 读到的值仍为 6。
+            为了解决这些并发带来的问题。 我们需要引入并发控制机制。
+        并发控制机制
+            悲观锁：假定会发生并发冲突，独占锁，屏蔽一切可能违反数据完整性的操作。
+            乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。乐观锁不能解决脏读的问题。</code></pre><p>6、线程之间的协作<br>当多个线程可以一起工作去解决某个问题时，如果某些部分必须在其它部分之前完成，那么就需要对线程进行协调。</p>
+<p>join()<br>在线程中调用另一个线程的 join() 方法，会将当前线程挂起，而不是忙等待，直到目标线程结束。<br>对于以下代码，虽然 b 线程先启动，但是因为在 b 线程中调用了 a 线程的 join() 方法，b 线程会等待 a 线程结束才继续执行，因此最后能够保证 a 线程的输出先于 b 线程的输出。</p>
+<pre><code>public class JoinExample {
+    private class A extends Thread {
+        @Override
+        public void run() {
+            System.out.println(&quot;A&quot;);
+        }
+    }
+    private class B extends Thread {
+        private A a;
+        B(A a) {
+            this.a = a;
+        }
+        @Override
+        public void run() {
+            try {
+                a.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(&quot;B&quot;);
+        }
+    }
+    public void test() {
+        A a = new A();
+        B b = new B(a);
+        b.start();
+        a.start();
+    }
+}
+
+public static void main(String[] args) {
+    JoinExample example = new JoinExample();
+    example.test();
+}</code></pre><p>wait() notify() notifyAll()<br>    调用 wait() 使得线程等待某个条件满足，线程在等待时会被挂起，当其他线程的运行使得这个条件满足时，其它线程会调用 notify()（随机叫醒一个） 或者 notifyAll() （叫醒所有 wait 线程，争夺时间片的线程只有一个）来唤醒挂起的线程。<br>    它们都属于 Object 的一部分，而不属于 Thread。<br>    只能用在同步方法或者同步控制块中使用！否则会在运行时抛出 IllegalMonitorStateExeception。<br>    使用 wait() 挂起期间，线程会释放锁。这是因为，如果没有释放锁，那么其它线程就无法进入对象的同步方法或者同步控制块中，那么就无法执行 notify() 或者 notifyAll() 来唤醒挂起的线程，造成死锁。</p>
+<p>await() signal() signalAll()<br>    java.util.concurrent 类库中提供了 Condition 类来实现线程之间的协调，可以在 Condition 上调用 await() 方法使线程等待，其它线程调用 signal() 或 signalAll() 方法唤醒等待的线程。相比于 wait() 这种等待方式，await() 可以指定等待的条件，因此更加灵活。<br>    使用 Lock 来获取一个 Condition 对象。</p>
+<p>sleep和wait有什么区别<br>    sleep 和 wait<br>        wait() 是 Object 的方法，而 sleep() 是 Thread 的静态方法；<br>        wait() 会释放锁，sleep() 不会。<br>    有什么区别<br>        sleep() 方法（休眠）是线程类（Thread）的静态方法，调用此方法会让当前线程暂停执行指定的时间，将执行机会（CPU）让给其他线程，但是对象的锁依然保持，因此休眠时间结束后会自动恢复（线程回到就绪状态）。<br>        wait() 是 Object 类的方法，调用对象的 wait() 方法导致当前线程放弃对象的锁（线程暂停执行），进入对象的等待池（wait pool），只有调用对象的 notify() 方法（或 notifyAll() 方法）时才能唤醒等待池中的线程进入等锁池（lock pool），如果线程重新获得对象的锁就可以进入就绪状态。</p>
+<p>7、线程不安全实例</p>
+<p>如果多个线程对同一个共享数据进行访问而不采取同步操作的话，那么操作的结果是不一致的。</p>
+<p>以下代码演示了 1000 个线程同时对 cnt 执行自增操作，操作结束之后它的值为 997 而不是 1000。</p>
+<p>public class ThreadUnsafeExample {<br>    private int cnt = 0;<br>    public void add() {<br>        cnt++;<br>    }<br>    public int get() {<br>        return cnt;<br>    }<br>}</p>
+<p>public static void main(String[] args) throws InterruptedException {<br>    final int threadSize = 1000;<br>    ThreadUnsafeExample example = new ThreadUnsafeExample();<br>    final CountDownLatch countDownLatch = new CountDownLatch(threadSize);<br>    ExecutorService executorService = Executors.newCachedThreadPool();<br>    for (int i = 0; i &lt; threadSize; i++) {<br>        executorService.execute(() -&gt; {<br>            example.add();<br>            countDownLatch.countDown();<br>        });<br>    }<br>    countDownLatch.await();<br>    executorService.shutdown();<br>    System.out.println(example.get());<br>}</p>
+<p>8、线程安全<br>线程安全定义<br>一个类可以被多个线程安全调用时就是线程安全的。</p>
+<p>线程安全分类<br>线程安全不是一个非真即假的命题，可以将共享数据按照安全程度的强弱顺序分成以下五类：不可变、绝对线程安全、相对线程安全、线程兼容和线程对立。</p>
+<p>（1） 不可变<br>不可变（Immutable）的对象一定是线程安全的<br>不可变的类型：<br>    final 关键字修饰的基本数据类型；<br>    String<br>    枚举类型<br>    Number 部分子类，如 Long 和 Double 等数值包装类型，BigInteger 和 BigDecimal 等大数据类型。但同为 Number 的子类型的原子类 AtomicInteger 和 AtomicLong 则并非不可变的。</p>
+<p>（2） 绝对线程安全<br>不管运行时环境如何，调用者都不需要任何额外的同步措施。</p>
+<p>（3）相对线程安全<br>相对的线程安全需要保证对这个对象单独的操作是线程安全的<br>在 Java 语言中，大部分的线程安全类都属于这种类型，例如 Vector、HashTable、Collections 的 synchronizedCollection() 方法包装的集合等。</p>
+<p>（4） 线程兼容<br>线程兼容是指对象本身并不是线程安全的，但是可以通过在调用端正确地使用同步手段来保证对象在并发环境中可以安全地使用，我们平常说一个类不是线程安全的，绝大多数时候指的是这一种情况。Java API 中大部分的类都是属于线程兼容的，如与前面的 Vector 和 HashTable 相对应的集合类 ArrayList 和 HashMap 等。</p>
+<p>（5） 线程对立<br>线程对立是指无论调用端是否采取了同步措施，都无法在多线程环境中并发使用的代码。由于 Java 语言天生就具备多线程特性，线程对立这种排斥多线程的代码是很少出现的</p>
+<p>线程安全的实现方法<br>    （1）阻塞同步<br>        synchronized和ReentrantLock。<br>    （2）非阻塞同步<br>        乐观锁<br>    （3）无同步方案<br>        a.可重入代码<br>        b.栈封闭。多个线程访问同一个方法的局部变量时，不会出现线程安全问题，因为局部变量存储在栈中，属于线程私有的。<br>        c.线程本地存储（ThreadLocal）</p>
+<p>9、多线程开发良好实践<br>    给线程起个有意义的名字，这样可以方便找 Bug。<br>    缩小同步范围，例如对于 synchronized，应该尽量使用同步块而不是同步方法。<br>    多用同步类少用 wait() 和 notify()。首先，CountDownLatch, CyclicBarrier, Semaphore 和 Exchanger 这些同步类简化了编码操作，而用 wait() 和 notify() 很难实现对复杂的控制流；其次，这些同步类是由最好的企业编写和维护，在后续的 JDK 中还会不断优化和完善，使用这些更高等级的同步工具你的程序可以不费吹灰之力获得优化。<br>    多用并发集合少用同步集合，例如应该使用 ConcurrentHashMap 而不是 Hashtable。<br>    使用本地变量和不可变类来保证线程安全。<br>    使用线程池而不是直接创建 Thread 对象，这是因为创建线程代价很高，线程池可以有效地利用有限的线程来启动任务。<br>    使用 BlockingQueue 实现生产者消费者问题。</p>
+<p>10、线程池<br>    初始化线程池<br>        newFixedThreadPool() 说明：初始化一个指定线程数的线程池，其中 corePoolSize == maxiPoolSize，使用 LinkedBlockingQuene 作为阻塞队列 特点：即使当线程池没有可执行任务时，也不会释放线程。<br>        newCachedThreadPool() 说明：初始化一个可以缓存线程的线程池，默认缓存60s，线程池的线程数可达到 Integer.MAX_VALUE，即 2147483647，内部使用 SynchronousQueue 作为阻塞队列； 特点：在没有任务执行时，当线程的空闲时间超过 keepAliveTime，会自动释放线程资源；当提交新任务时，如果没有空闲线程，则创建新线程执行任务，会导致一定的系统开销； 因此，使用时要注意控制并发的任务数，防止因创建大量的线程导致而降低性能。<br>        newSingleThreadExecutor() 说明：初始化只有一个线程的线程池，内部使用 LinkedBlockingQueue 作为阻塞队列。 特点：如果该线程异常结束，会重新创建一个新的线程继续执行任务，唯一的线程可以保证所提交任务的顺序执行<br>        newScheduledThreadPool() 特点：初始化的线程池可以在指定的时间内周期性的执行所提交的任务，在实际的业务场景中可以使用该线程池定期的同步数据。</p>
+<p>二、面试指南<br>1、volatile与synchronized区别<br>    （1）仅靠volatile不能保证线程的安全性。（原子性）<br>        ① volatile 轻量级，只能修饰变量。synchronized重量级，还可修饰方法<br>        ② volatile 只能保证数据的可见性，不能用来同步，因为多个线程并发访问 volatile 修饰的变量不会阻塞。<br>        synchronized 不仅保证可见性，而且还保证原子性，因为，只有获得了锁的线程才能进入临界区，从而保证临界区中的所有语句都全部执行。多个线程争抢 synchronized 锁对象时，会出现阻塞。<br>    （2）线程安全性<br>        线程安全性包括两个方面，①可见性。②原子性。<br>        从上面自增的例子中可以看出：仅仅使用 volatile 并不能保证线程安全性。而 synchronized 则可实现线程的安全性。</p>
+<p>2、什么是线程池？如果让你设计一个动态大小的线程池，如何设计，应该有哪些方法？线程池创建的方式？<br>    什么是线程池？<br>        线程池顾名思义就是事先创建若干个可执行的线程放入一个池（容器）中，需要的时候从池中获取线程不用自行创建，使用完毕不需要销毁线程而是放回池中，从而减少创建和销毁线程对象的开销。</p>
+<pre><code>设计一个动态大小的线程池，如何设计，应该有哪些方法
+    一个线程池包括以下四个基本组成部分：
+        线程管理器 (ThreadPool)：用于创建并管理线程池，包括创建线程，销毁线程池，添加新任务；
+        工作线程 (PoolWorker)：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；
+        任务接口 (Task)：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；
+        任务队列 (TaskQueue)：用于存放没有处理的任务。提供一种缓冲机制；
+
+    所包含的方法
+        private ThreadPool() 创建线程池
+        public static ThreadPool getThreadPool() 获得一个默认线程个数的线程池
+        public void execute(Runnable task) 执行任务,其实只是把任务加入任务队列，什么时候执行有线程池管理器决定
+        public void execute(Runnable[] task) 批量执行任务,其实只是把任务加入任务队列，什么时候执行有线程池管理器决定
+        public void destroy() 销毁线程池,该方法保证在所有任务都完成的情况下才销毁所有线程，否则等待任务完成才销毁
+        public int getWorkThreadNumber() 返回工作线程的个数
+        public int getFinishedTasknumber() 返回已完成任务的个数,这里的已完成是只出了任务队列的任务个数，可能该任务并没有实际执行完成
+        public void addThread() 在保证线程池中所有线程正在执行，并且要执行线程的个数大于某一值时。增加线程池中线程的个数
+        public void reduceThread() 在保证线程池中有很大一部分线程处于空闲状态，并且空闲状态的线程在小于某一值时，减少线程池中线程的个数
+
+线程池四种创建方式
+    Java 通过 Executors 提供四种线程池，分别为：
+        new CachedThreadPool 创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。
+        new FixedThreadPool 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
+        new ScheduledThreadPool 创建一个定长线程池，支持定时及周期性任务执行。
+        new SingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</code></pre><p>3、什么是并发、并行<br>并发<br>    并发是指两个任务都请求运行，而处理器只能按受一个任务，就把这两个任务安排轮流进行，由于时间间隔较短，使人感觉两个任务都在运行。<br>    如果用一台电脑我先给甲发个消息，然后立刻再给乙发消息，然后再跟甲聊，再跟乙聊。这就叫并发。<br>    多个线程操作相同的资源，保证线程安全，合理使用资源</p>
+<p>并行<br>    并行就是两个任务同时运行，就是甲任务进行的同时，乙任务也在进行。(需要多核CPU)<br>    比如我跟两个网友聊天，左手操作一个电脑跟甲聊，同时右手用另一台电脑跟乙聊天，这就叫并行。<br>    服务能同时处理很多请求，提高程序性能    </p>
+<p>4、什么是线程安全<br>当多个线程访问同一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替运行，也不需要进行额外的同步，或者在调用方进行任何其他的协调操作，调用这个对象的行为都可以获取正确的结果，那这个对象是线程安全的。——来自《深入理解Java虚拟机》</p>
+<p>如何保证线程安全<br>    对变量使用volitate<br>    对程序段进行加锁（synchronized，lock）</p>
+<p>非线程安全并不是多线程环境下就不能使用。注意我上面有说到：多线程操作同一个对象。注意是同一个对象。比如最上面那个模拟，就是在主线程中 new 的一个 ArrayList 然后多个线程操作同一个 ArrayList 对象。</p>
+<p>如果是每个线程中 new 一个 ArrayList，而这个 ArrayList 只在这一个线程中使用，那么肯定是没问题的。</p>
+<ol start="5">
+<li><p>什么是线程？线程和进程有什么区别？为什么要使用多线程<br>（1）线程和进程<br> 进程是操作系统分配资源的最小单位<br> 线程是CPU调度的最小单位<br>（2）使用线程的原因<br> 使用多线程可以减少程序的响应时间；<br> 与进程相比，线程的创建和切换开销更小；<br> 多核电脑上，可以同时执行多个线程，提高资源利用率；<br> 简化程序的结构，使程序便于理解和维护</p>
+</li>
+<li><p>多线程共用一个数据变量需要注意什么？<br> 当我们在线程对象（Runnable）中定义了全局变量，run方法会修改该变量时，如果有多个线程同时使用该线程对象，那么就会造成全局变量的值被同时修改，造成错误.<br> ThreadLocal 是JDK引入的一种机制，它用于解决线程间共享变量，使用 ThreadLocal 声明的变量，即使在线程中属于全局变量，针对每个线程来讲，这个变量也是独立的。<br> volatile 变量每次被线程访问时，都强迫线程从主内存中重读该变量的最新值，而当该变量发生修改变化时，也会强迫线程将最新的值刷新回主内存中。这样一来，不同的线程都能及时的看到该变量的最新值。</p>
+</li>
+</ol>
+<p>7、内存泄漏与溢出<br>Java 会使用有向图的方法进行管理内存，实时监控对象是否可以达到，如果不可到达，则就将其回收，这样也可以消除引用循环的问题。</p>
+<p>在 Java 语言中，判断一个内存空间是否符合垃圾收集标准有两个：一个是给对象赋予了空值 null，以下再没有调用过，另一个是给对象赋予了新值，这样重新分配了内存空间。</p>
+<p>内存泄露：是指无用对象（不再使用的对象）持续占有内存或无用对象的内存得不到及时释放，从而造成的内存空间的浪费称为内存泄露。内存泄露有时不严重且不易察觉，这样开发者就不知道存在内存泄露，但有时也会很严重，会提示 Out of memory。<br>内存溢出：指程序运行过程中无法申请到足够的内存而导致的一种错误。</p>
+<p>8、如何减少线程上下文切换<br>使用多线程时，不是多线程能提升程序的执行速度，使用多线程是为了更好地利用 CPU 资源！<br>程序在执行时，多线程是 CPU 通过给每个线程分配 CPU 时间片来实现的，时间片是CPU分配给每个线程执行的时间，因时间片非常短，所以CPU 通过不停地切换线程执行。<br>线程不是越多就越好的，因为线程上下文切换是有性能损耗的，在使用多线程的同时需要考虑如何减少上下文切换<br>    无锁并发编程。多线程竞争时，会引起上下文切换，所以多线程处理数据时，可以用一些办法来避免使用锁，如将数据的 ID 按照Hash取模分段，不同的线程处理不同段的数据<br>    CAS算法。Java 的 Atomic 包使用 CAS 算法来更新数据，而不需要加锁。<br>    控制线程数量。避免创建不需要的线程，比如任务很少，但是创建了很多线程来处理，这样会造成大量线程都处于等待状态<br>    协程。在单线程里实现多任务的调度，并在单线程里维持多个任务间的切换<br>    协程可以看成是用户态自管理的“线程”。不会参与CPU时间调度，没有均衡分配到时间。非抢占式的</p>
+<pre><code>如果是IO密集型的话，线程可以多一些。
+如果是CPU密集型的话，线程不宜太多。</code></pre><p>9、线程间通信和进程间通信<br>线程间通信<br>    synchronized同步<br>    while轮询<br>    wait/notify机制<br>    管道通信<br>进程间通信<br>    管道<br>    命名管道<br>    信号<br>    消息队列<br>    共享内存<br>    内存映射<br>    信号量<br>    套接口</p>
+<p>10、什么是同步和异步，阻塞和非阻塞？<br>同步<br>    在发出一个同步调用时，在没有得到结果之前，该调用就不返回。<br>    例如：按下电饭锅的煮饭按钮，然后等待饭煮好，把饭盛出来，然后再去炒菜。<br>异步<br>    在发出一个异步调用后，调用者不会立刻得到结果，该调用就返回了。<br>    例如：按下电钮锅的煮饭按钮，直接去炒菜或者做别的事情，当电饭锅“滴滴滴”响的时候，再回去把饭盛出来。显然，异步式编程要比同步式编程高效得多。<br>阻塞<br>    调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。<br>    例子：你打电话问书店老板有没有《分布式系统》这本书，你如果是阻塞式调用，你会一直把自己“挂起”，直到得到这本书有没有的结果<br>非阻塞<br>    在不能立刻得到结果之前，该调用不会阻塞当前线程。<br>    例子：你打电话问书店老板有没有《分布式系统》这本书，你不管老板有没有告诉你，你自己先一边去玩了， 当然你也要偶尔过几分钟check一下老板有没有返回结果。</p>
+
+      
+    </div>
+    
+  </div>
+  
+  
+</article>
+
+  
     <article id="post-Java集合框架" class="article global-container article-type-post" itemscope itemprop="blogPost">
   
     <header class="article-header">
@@ -837,7 +1279,7 @@ public static void main(String[] args) {
     Integer[] arr = {10, 91, 8, 7, 6, 5, 4, 3, 2, 1};
     HeapSort.sort2(arr);
     PrintHelper.printArray(arr);
-}</code></pre><p>}<br>8、基数排序<br>         平均时间复杂度        原地排序    额外空间    稳定排序<br>插入排序    O(n^2)               √            O(1)        √<br>归并排序    O(nlogn)           ×            O(n)        √<br>快速排序    O(nlogn)           √            O(logn)        ×<br>堆排序        O(nlogn)           √            O(1)        ×</p>
+}</code></pre><p>}<br>8、基数排序<br>9、总结<br>         平均时间复杂度        原地排序    额外空间    稳定排序<br>插入排序    O(n^2)               √            O(1)        √<br>归并排序    O(nlogn)           ×            O(n)        √<br>快速排序    O(nlogn)           √            O(logn)        ×<br>堆排序        O(nlogn)           √            O(1)        ×</p>
 
       
     </div>
@@ -1221,7 +1663,7 @@ ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
   <div class="widget-box">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Java/" style="font-size: 10px;">Java</a> <a href="/tags/历史/" style="font-size: 10px;">历史</a> <a href="/tags/数据结构与算法/" style="font-size: 20px;">数据结构与算法</a>
+      <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/历史/" style="font-size: 10px;">历史</a> <a href="/tags/数据结构与算法/" style="font-size: 20px;">数据结构与算法</a>
     </div>
   </div>
 
@@ -1242,6 +1684,10 @@ ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
       <ul>
         
           <li>
+            <a href="/posts/技术/2019-08-06-Java并发编程.html">Java并发编程</a>
+          </li>
+        
+          <li>
             <a href="/posts/技术/2019-08-06-Java集合框架.html">Java集合框架</a>
           </li>
         
@@ -1255,10 +1701,6 @@ ans.push_back(node-&gt;val);</code></pre><p>  }<br>};</p>
         
           <li>
             <a href="/posts/技术/2019-08-01-二叉树.html">二叉树</a>
-          </li>
-        
-          <li>
-            <a href="/posts/技术/2019-08-01-红黑树.html">红黑树</a>
           </li>
         
       </ul>
