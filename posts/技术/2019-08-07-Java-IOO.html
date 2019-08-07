@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Java IO | dretrtg的站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <meta name="description" content="Java 的 I/O 大概可以分成以下几类：    磁盘操作：File    字节操作：InputStream 和 OutputStream    字符操作：Reader 和 Writer    对象操作：Serializable    网络操作：Socket    新的输入/输出：NIO 1、磁盘操作File 类可以用于表示文件和目录的信息，但是它不表示文件的内容。 递归地输出一个目录下所有文件">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java IO">
+<meta property="og:url" content="http://yoursite.com/posts/技术/2019-08-07-Java-IOO.html">
+<meta property="og:site_name" content="dretrtg的站">
+<meta property="og:description" content="Java 的 I/O 大概可以分成以下几类：    磁盘操作：File    字节操作：InputStream 和 OutputStream    字符操作：Reader 和 Writer    对象操作：Serializable    网络操作：Socket    新的输入/输出：NIO 1、磁盘操作File 类可以用于表示文件和目录的信息，但是它不表示文件的内容。 递归地输出一个目录下所有文件">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-07T02:19:34.132Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java IO">
+<meta name="twitter:description" content="Java 的 I/O 大概可以分成以下几类：    磁盘操作：File    字节操作：InputStream 和 OutputStream    字符操作：Reader 和 Writer    对象操作：Serializable    网络操作：Socket    新的输入/输出：NIO 1、磁盘操作File 类可以用于表示文件和目录的信息，但是它不表示文件的内容。 递归地输出一个目录下所有文件">
+  
+    <link rel="alternate" href="/atom.xml" title="dretrtg的站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/default-avatar.webp">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/highlight.css">
+  <script>
+  let antiquityStorage = window.sessionStorage.getItem('antiquitySessionStorage');
+  if (antiquityStorage == '' || antiquityStorage == null) {
+    var antiquityLoader = '<div id="loaderbox"><div class="loader"><div class="load-roll"><div class="load-top"></div><div class="load-right"></div><div class="load-bottom"></div></div></div></div>';
+    document.write(antiquityLoader);
+    document.body.style.overflow = 'hidden'
+  }
+  </script>
+</head>
+</html>
+<body>
+  <div id="fullpage" class="mobile-nav-right">
+    
+      <div id="wrapper" title="图片来自网络">
+    
+    
+      <header id="header">
+  <div id="nav-toggle" class="nav-toggle"></div>
+  <div class="head-box global-width">
+    <nav class="nav-box nav-right">
+      
+        <a class="nav-item" href="/" title
+        
+        >首页</a>
+      
+        <a class="nav-item" href="/archives" title
+        
+        >归档</a>
+      
+    </nav>
+  </div>
+</header>
+      <div id="middlecontent" title class="global-width sidebar-right">
+        <section id="main"><article id="post-Java-IOO" class="article global-container article-type-post" itemscope itemprop="blogPost">
+  
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Java IO
+    </h1>
+  
+
+    </header>
+  
+  <div class="article-meta">
+    <a href="/posts/技术/2019-08-07-Java-IOO.html" class="article-date">
+  <time datetime="2019-08-07T00:53:46.000Z" itemprop="datePublished">2019-08-07</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+    
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+  </div>
+  
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+  
+
+  <div class="article-inner">
+    
+    <div class="article-content article-content-cloud" itemprop="articleBody">
+      
+        <p>Java 的 I/O 大概可以分成以下几类：<br>    磁盘操作：File<br>    字节操作：InputStream 和 OutputStream<br>    字符操作：Reader 和 Writer<br>    对象操作：Serializable<br>    网络操作：Socket<br>    新的输入/输出：NIO</p>
+<p>1、磁盘操作<br>File 类可以用于表示文件和目录的信息，但是它不表示文件的内容。</p>
+<p>递归地输出一个目录下所有文件：</p>
+<p>public static void listAllFiles(File dir)<br>{<br>    if (dir == null || !dir.exists()) {<br>        return;<br>    }<br>    if (dir.isFile()) {<br>        System.out.println(dir.getName());<br>        return;<br>    }<br>    for (File file : dir.listFiles()) {<br>        listAllFiles(file);<br>    }<br>}</p>
+<p>2、字节操作<br>使用字节流操作进行文件复制：</p>
+<p>public static void copyFile(String src, String dist) throws IOException<br>{<br>    FileInputStream in = new FileInputStream(src);<br>    FileOutputStream out = new FileOutputStream(dist);<br>    byte[] buffer = new byte[20 * 1024];<br>    // read() 最多读取 buffer.length 个字节<br>    // 返回的是实际读取的个数<br>    // 返回 -1 的时候表示读到 eof，即文件尾<br>    while (in.read(buffer, 0, buffer.length) != -1) {<br>        out.write(buffer);<br>    }<br>    in.close();<br>    out.close();<br>}</p>
+<p>3、字符操作<br>不管是磁盘还是网络传输，最小的存储单元都是字节，而不是字符。但是在程序中操作的通常是字符形式的数据，因此需要提供对字符进行操作的方法。<br>    InputStreamReader 实现从字节流解码成字符流；<br>    OutputStreamWriter 实现字符流编码成为字节流。</p>
+<p>逐行输出文本文件的内容</p>
+<p>public static void readFileContent(String filePath) throws IOException<br>{<br>    FileReader fileReader = new FileReader(filePath);<br>    BufferedReader bufferedReader = new BufferedReader(fileReader);<br>    String line;<br>    while ((line = bufferedReader.readLine()) != null) {<br>        System.out.println(line);<br>    }<br>    // 装饰者模式使得 BufferedReader 组合了一个 Reader 对象<br>    // 在调用 BufferedReader 的 close() 方法时会去调用 fileReader 的 close() 方法<br>    // 因此只要一个 close() 调用即可<br>    bufferedReader.close();<br>}</p>
+<p>编码就是把字符转换为字节，而解码是把字节重新组合成字符。<br>Java 使用双字节编码 UTF-16be，这不是指 Java 只支持这一种编码方式，而是说 char 这种类型使用 UTF-16be 进行编码。char 类型占 16 位，也就是两个字节，Java 使用这种双字节编码是为了让一个中文或者一个英文都能使用一个 char 来存储。</p>
+<p>4、Java序列化，如何实现序列化和反序列化，常见的序列化协议有哪些？<br>Java序列化定义<br>    （1）Java序列化是指把Java对象转换为字节序列的过程，而Java反序列化是指把字节序列恢复为Java对象的过程；<br>    （2）序列化：对象序列化的最主要的用处就是在传递和保存对象的时候，保证对象的完整性和可传递性。序列化是把对象转换成有序字节流，以便在网络上传输或者保存在本地文件中。序列化后的字节流保存了Java对象的状态以及相关的描述信息。序列化机制的核心作用就是对象状态的保存与重建。<br>    （3）反序列化：客户端从文件中或网络上获得序列化后的对象字节流后，根据字节流中所保存的对象状态及描述信息，通过反序列化重建对象。<br>    （4）本质上讲，序列化就是把实体对象状态按照一定的格式写入到有序字节流，反序列化就是从有序字节流重建对象，恢复对象状态。</p>
+<p>如何实现序列化和反序列化，底层怎么实现<br>    1、JDK类库中序列化和反序列化API<br>        （1）java.io.ObjectOutputStream：表示对象输出流；<br>        它的writeObject(Object obj)方法可以对参数指定的obj对象进行序列化，把得到的字节序列写到一个目标输出流中；<br>        （2）java.io.ObjectInputStream：表示对象输入流；<br>        它的readObject()方法源输入流中读取字节序列，再把它们反序列化成为一个对象，并将其返回；<br>    2、实现序列化的要求<br>        只有实现了 Serializable 或 Externalizable 接口的类的对象才能被序列化，否则抛出异常！<br>    3、实现Java对象序列化与反序列化的方法<br>    4、JDK类库中序列化的步骤<br>        步骤一：创建一个对象输出流，它可以包装一个其它类型的目标输出流，如文件输出流：<br>        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(“D:\object.out”));<br>        步骤二：通过对象输出流的writeObject()方法写对象：<br>        oos.writeObject(new User(“xuliugen”, “123456”, “male”));<br>    5、JDK类库中反序列化的步骤<br>        步骤一：创建一个对象输入流，它可以包装一个其它类型输入流，如文件输入流：<br>        ObjectInputStream ois= new ObjectInputStream(new FileInputStream(“object.out”));<br>        步骤二：通过对象输出流的readObject()方法读取对象：<br>        User user = (User) ois.readObject();</p>
+<p>相关注意事项<br>    1、序列化时，只对对象的状态进行保存，而不管对象的方法；<br>    2、当一个父类实现序列化，子类自动实现序列化，不需要显式实现 Serializable 接口；<br>    3、当一个对象的实例变量引用其他对象，序列化该对象时也把引用对象进行序列化；<br>    4、并非所有的对象都可以序列化，至于为什么不可以，有很多原因了，比如：<br>        安全方面的原因，比如一个对象拥有private，public等field，对于一个要传输的对象，比如写到文件，或者进行RMI传输等等，在序列化进行传输的过程中，这个对象的private等域是不受保护的；<br>        资源分配方面的原因，比如socket，thread类，如果可以序列化，进行传输或者保存，也无法对他们进行重新的资源分配，而且，也是没有必要这样实现；<br>    5、声明为static和transient类型的成员数据不能被序列化。因为static代表类的状态，transient代表对象的临时数据。<br>    6、序列化运行时使用一个称为 serialVersionUID 的版本号与每个可序列化类相关联，该序列号在反序列化过程中用于验证序列化对象的发送者和接收者是否为该对象加载了与序列化兼容的类。为它赋予明确的值。显式地定义serialVersionUID有两种用途：<br>        在某些场合，希望类的不同版本对序列化兼容，因此需要确保类的不同版本具有相同的serialVersionUID；<br>        在某些场合，不希望类的不同版本对序列化兼容，因此需要确保类的不同版本具有不同的serialVersionUID。<br>    7、Java有很多基础类已经实现了serializable接口，比如String , Vector等。但是也有一些没有实现serializable接口的；<br>    8、如果一个对象的成员变量是一个对象，那么这个对象的数据成员也会被保存！这是能用序列化解决深拷贝的重要原因；</p>
+<p>ArrayList 序列化和反序列化的实现 ：ArrayList 中存储数据的数组是用 transient 修饰的，因为这个数组是动态扩展的，并不是所有的空间都被使用，因此就不需要所有的内容都被序列化。通过重写序列化和反序列化方法，使得可以只序列化数组中有内容的那部分数据。</p>
+<p>常见的序列化协议有哪些？<br>    COM主要用于Windows平台，并没有真正实现跨平台，另外COM的序列化的原理利用了编译器中虚表，使得其学习成本巨大。<br>    CORBA是早期比较好的实现了跨平台，跨语言的序列化协议。COBRA的主要问题是参与方过多带来的版本过多，版本之间兼容性较差，以及使用复杂晦涩。<br>    XML是一种常用的序列化和反序列化协议，具有跨机器，跨语言等优点。<br>    SOAP（Simple Object Access protocol） 是一种被广泛应用的，基于XML为序列化和反序列化协议的结构化消息传递协议。SOAP具有安全、可扩展、跨语言、跨平台并支持多种传输层协议。<br>    JSON（JavaScript Object Notation）<br>        相对于XML而言，序列化后的数据更加简洁。<br>        它具备javascript的先天性支持，所以被广泛应用于Web browser的应用常景中，是Ajax的事实标准协议。<br>        与XML相比，其协议比较简单，解析速度比较快。</p>
+<p>5、同步和异步<br>同步IO：<br>    读写IO时代码等数据返回后才继续执行后续代码<br>    代码编写简单，CPU执行效率低<br>    JDK提供的java.io是同步IO<br>异步IO：<br>    读写IO时仅发出请求，然后立即执行后续代码<br>    代码编写复杂，CPU执行效率高<br>    JDK提供的java.nio是异步IO</p>
+<p>7、BIO，NIO，AIO区别<br>    BIO（同步阻塞）：客户端和服务器连接需要三次握手，使用简单，但吞吐量小<br>    NIO（同步非阻塞）：客户端与服务器通过Channel连接，采用多路复用器轮询注册的Channel。提高吞吐量和可靠性。<br>    AIO（异步非阻塞）：NIO的升级版，采用异步通道实现异步通信，其read和write方法均是异步方法。</p>
+<p>8、Stock通信的伪代码实现流程<br>    服务器绑定端口：server = new ServerSocket(PORT)<br>    服务器阻塞监听：socket = server.accept()<br>    服务器开启线程：new Thread(Handle handle)<br>    服务器读写数据：BufferedReader PrintWriter<br>    客户端绑定IP和PORT：new Socket(IP_ADDRESS, PORT)<br>    客户端传输接收数据：BufferedReader PrintWriter</p>
+<p>9、网络操作<br>Java 中的网络支持：<br>    InetAddress：用于表示网络上的硬件资源，即 IP 地址；<br>    URL：统一资源定位符；<br>    Sockets：使用 TCP 协议实现网络通信；<br>    Datagram：使用 UDP 协议实现网络通信。</p>
+<p>InetAddress<br>没有公有构造函数，只能通过静态方法来创建实例。</p>
+<p>InetAddress.getByName(String host);<br>InetAddress.getByAddress(byte[] address);</p>
+<p>URL<br>可以直接从 URL 中读取字节流数据。</p>
+<p>public static void main(String[] args) throws IOException<br>{<br>    URL url = new URL(“<a href="http://www.baidu.com&quot;" target="_blank" rel="noopener">http://www.baidu.com&quot;</a>);<br>    // 字节流<br>    InputStream is = url.openStream();<br>    // 字符流<br>    InputStreamReader isr = new InputStreamReader(is, “utf-8”);<br>    BufferedReader br = new BufferedReader(isr);<br>    String line = br.readLine();<br>    while (line != null) {<br>        System.out.println(line);<br>        line = br.readLine();<br>    }<br>    br.close();<br>}</p>
+<p>Sockets<br>    ServerSocket：服务器端类<br>    Socket：客户端类<br>    服务器和客户端通过 InputStream 和 OutputStream 进行输入输出。</p>
+<p>什么是Socket？<br>    TCP用主机的IP地址加上主机上的端口号作为TCP连接的端点，这种端点就叫做套接字（socket）或插口。<br>    套接字用（IP地址：端口号）表示。</p>
+<pre><code>Socket是进程通讯的一种方式，即调用这个网络库的一些API函数实现分布在不同主机的相关进程之间的数据交换。
+
+socket是网络编程的基础，本文用打电话来类比socket通信中建立TCP连接的过程。
+
+    socket函数：表示你买了或者借了一部手机。 bind函数：告诉别人你的手机号码，让他们给你打电话。 listen函数：打开手机的铃声，而不是静音，这样有电话时可以立马反应。listen函数的第二个参数，最大连接数，表示最多有几个人可以同时拨打你的号码。不过我们的手机，最多只能有一个人打进来，要不然就提示占线。 connect函数：你的朋友知道了你的号码，通过这个号码来联系你。在他等待你回应的时候，不能做其他事情，所以connect函数是阻塞的。 accept函数：你听到了电话铃声，接电话，accept it！然后“喂”一声，你的朋友听到你的回应，知道电话已经打进去了。至此，一个TCP连接建立了。 read/write函数：连接建立后，TCP的两端可以互相收发消息，这时候的连接是全双工的。对应打电话中的电话煲。 close函数：通话完毕，一方说“我挂了”，另一方回应&quot;你挂吧&quot;，然后将连接终止。实际的close(sockfd)有些不同，它不止是终止连接，还把手机也归还，不在占有这部手机，就当是公用电话吧。
+
+    注意到，上述连接是阻塞的，你一次只能响应一个用户的连接请求，但在实际网络编程中，一个服务器服务于多个客户，上述方案也就行不通了，怎么办？想一想10086，移动的声讯服务台，也是只有一个号码，它怎么能同时服务那么多人呢？可以这样理解，在你打电话到10086时，总服务台会让一个接线员来为你服务，而它自己却继续监听有没有新的电话接入。在网络编程中，这个过程类似于fork一个子进程，建立实际的通信连接，而主进程继续监听。10086的接线员是有限的，所以当连接的人数达到上线时，它会放首歌给你听，忙等待，直到有新的空闲接线员为止。 实际网络编程中，处理并发的方式还有select/poll/epoll等。</code></pre><p>Socket的特点<br>    Socket基于TCP链接，数据传输有保障<br>    Socket适用于建立长时间链接<br>    Socket编程通常应用于即时通讯</p>
+
+      
+    </div>
+    
+      <footer class="article-footer">
+        完
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  <div class="article-nav-block">
+    
+  </div>
+  <div class="article-nav-block">
+    
+      <a href="/posts/技术/2019-08-06-Java并发编程.html" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">Java并发编程</div>
+        <strong class="article-nav-caption"></strong>
+      </a>
+    
+  </div>
+</nav>
+
+    
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: '',
+  repo: '',
+  oauth: {
+    client_id: '',
+    client_secret: '',
+  },
+})
+gitment.render('gitmentContainer')
+</script>
+
+  
+  
+</article>
+</section>
+        <aside id="sidebar">
+  
+    <div class="widget-box">
+  <div class="avatar-box">
+    <img class="avatar" src="/images/default-avatar.webp" title="图片来自网络"></img>
+    <h3 class="avatar-name">
+      
+        天佑昨日
+      
+    </h3>
+    <p class="avatar-slogan">
+      明日不可求 幸得昨日来
+    </p>
+  </div>
+</div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/历史/" style="font-size: 10px;">历史</a> <a href="/tags/数据结构与算法/" style="font-size: 15px;">数据结构与算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/posts/技术/2019-08-07-Java-IOO.html">Java IO</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-06-Java并发编程.html">Java并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-06-Java集合框架.html">Java集合框架</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-02-Java基础.html">Java基础</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-01-排序.html">排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+      <div class="widget-box">
+    <h3 class="widget-title">友链</h3>
+    <div class="widget">
+      
+        <a style="display: block;" href="https://dretrtg.github.io/" title target='_blank'
+        >dretrtg</a>
+      
+    </div>
+  </div>
+
+  
+</aside>
+      </div>
+      <footer id="footer">
+  <div class="foot-box global-width">
+    &copy; 2019 dretrtg &nbsp;&nbsp;
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    &nbsp;|&nbsp;主题 <a href="https://github.com/yiluyanxia/hexo-theme-antiquity">antiquity</a>
+    <br>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">不蒜子告之   阁下是第<span id="busuanzi_value_site_pv"></span>个访客</span>
+  </div>
+</footer>
+      <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script>
+if (!window.jQuery) {
+var script = document.createElement('script');
+script.src = "/js/jquery-2.0.3.min.js";
+document.body.write(script);
+}
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+    </div>
+    <nav id="mobile-nav" class="mobile-nav-box">
+  <div class="mobile-nav-img mobile-nav-top"></div>
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+  <div class="mobile-nav-img  mobile-nav-bottom"></div>
+</nav>    
+  </div>
+</body>
+</html>
