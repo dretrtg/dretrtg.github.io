@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Java Web | dretrtg的站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <meta name="description" content="一、Servlet/JSP/Web1、什么是Servlet    Servlet三种实现方式：        实现javax.servlet.Servlet接口        继承javax.servlet.GenericServlet类        继承javax.servlet.http.HttpServlet类 　　通常会去继承HttpServlet类来完成Servlet。2、Tomcat">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Web">
+<meta property="og:url" content="http://yoursite.com/posts/技术/2019-08-08-Java-Web.html">
+<meta property="og:site_name" content="dretrtg的站">
+<meta property="og:description" content="一、Servlet/JSP/Web1、什么是Servlet    Servlet三种实现方式：        实现javax.servlet.Servlet接口        继承javax.servlet.GenericServlet类        继承javax.servlet.http.HttpServlet类 　　通常会去继承HttpServlet类来完成Servlet。2、Tomcat">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-08-08T03:24:29.100Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Web">
+<meta name="twitter:description" content="一、Servlet/JSP/Web1、什么是Servlet    Servlet三种实现方式：        实现javax.servlet.Servlet接口        继承javax.servlet.GenericServlet类        继承javax.servlet.http.HttpServlet类 　　通常会去继承HttpServlet类来完成Servlet。2、Tomcat">
+  
+    <link rel="alternate" href="/atom.xml" title="dretrtg的站" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/images/default-avatar.webp">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/highlight.css">
+  <script>
+  let antiquityStorage = window.sessionStorage.getItem('antiquitySessionStorage');
+  if (antiquityStorage == '' || antiquityStorage == null) {
+    var antiquityLoader = '<div id="loaderbox"><div class="loader"><div class="load-roll"><div class="load-top"></div><div class="load-right"></div><div class="load-bottom"></div></div></div></div>';
+    document.write(antiquityLoader);
+    document.body.style.overflow = 'hidden'
+  }
+  </script>
+</head>
+</html>
+<body>
+  <div id="fullpage" class="mobile-nav-right">
+    
+      <div id="wrapper" title="图片来自网络">
+    
+    
+      <header id="header">
+  <div id="nav-toggle" class="nav-toggle"></div>
+  <div class="head-box global-width">
+    <nav class="nav-box nav-right">
+      
+        <a class="nav-item" href="/" title
+        
+        >首页</a>
+      
+        <a class="nav-item" href="/archives" title
+        
+        >归档</a>
+      
+    </nav>
+  </div>
+</header>
+      <div id="middlecontent" title class="global-width sidebar-right">
+        <section id="main"><article id="post-Java-Web" class="article global-container article-type-post" itemscope itemprop="blogPost">
+  
+    <header class="article-header">
+      
+  
+    <h1 class="article-title" itemprop="name">
+      Java Web
+    </h1>
+  
+
+    </header>
+  
+  <div class="article-meta">
+    <a href="/posts/技术/2019-08-08-Java-Web.html" class="article-date">
+  <time datetime="2019-08-08T02:44:27.000Z" itemprop="datePublished">2019-08-08</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/技术/">技术</a>
+  </div>
+
+    
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+  </div>
+  
+    <span id="busuanzi_container_page_pv">
+      本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+    </span>
+  
+
+  <div class="article-inner">
+    
+    <div class="article-content article-content-cloud" itemprop="articleBody">
+      
+        <p>一、Servlet/JSP/Web<br>1、什么是Servlet<br>    Servlet三种实现方式：<br>        实现javax.servlet.Servlet接口<br>        继承javax.servlet.GenericServlet类<br>        继承javax.servlet.http.HttpServlet类</p>
+<p>　　通常会去继承HttpServlet类来完成Servlet。<br>2、Tomcat容器等级<br>Tomcat容器分为4个等级，Servlet容器管理Context容器，一个Context对应一个Web工程。<br>3、Servlet执行流程<br>浏览器请求<br>    浏览器向服务器请求时，服务器不会直接执行我们的类，而是到 web.xml 里寻找路径名 ① 浏览器输入访问路径后，携带了请求行，头，体 ② 根据访问路径找到已注册的 servlet 名称 ③ 根据映射找到对应的 servlet 名 ④ 根据根据 servlet 名找到我们全限定类名，既我们自己写的类<br>服务器创建对象<br>    ① 服务器找到全限定类名后，通过反射创建对象，同时也创建了 servletConfig，里面存放了一些初始化信息（注意服务器只会创建一次 servlet 对象，所以 servletConfig 也只有一个）<br>调用init方法<br>    ① 对象创建好之后，首先要执行 init 方法，但是我们发现我们自定义类下没有 init 方法，所以程序会到其父类 HttpServlet 里找 ② 我们发现 HttpServlet 里也没有 init 方法，所以继续向上找，既向其父类 GenericServlet 中继续寻找,在 GenericServlet 中我们发现了 init 方法，则执行 init 方法（对接口 Servlet 中的 init 方法进行了重写）<br>调用service方法<br>    接着，服务器会先创建两个对象：ServletRequest 请求对象和 ServletResponse 响应对象，用来封装浏览器的请求数据和封装向浏览器的响应数据 ① 接着服务器会默认在我们写的类里寻找 service(ServletRequest req, ServletResponse res) 方法，但是 DemoServlet 中不存在，那么会到其父类中寻找 ② 到父类 HttpServlet 中发现有此方法，则直接调用此方法，并将之前创建好的两个对象传入 ③ 然后将传入的两个参数强转，并调用 HttpServlet 下的另外个 service 方法 ④ 接着执行 service(HttpServletRequest req, HttpServletResponse resp) 方法，在此方法内部进行了判断请求方式，并执行doGet和doPost，但是doGet和doPost方法已经被我们自己重写了，所以会执行我们重写的方法<br>向浏览器响应<br>4、Servlet生命周期<br>    void init(ServletConfig servletConfig) ：Servlet对象创建之后马上执行的初始化方法，只执行一次；<br>    void service(ServletRequest servletRequest, ServletResponse servletResponse) ：每次处理请求都是在调用这个方法，它会被调用多次；<br>    void destroy() ：在Servlet被销毁之前调用，负责释放 Servlet 对象占用的资源的方法；</p>
+<pre><code>服务器启动时 ( web.xml中配置load-on-startup=1，默认为0 ) 或者第一次请求该 servlet 时，就会初始化一个 Servlet 对象，也就是会执行初始化方法 init(ServletConfig conf)
+
+该 servlet 对象去处理所有客户端请求，在 service(ServletRequest req，ServletResponse res) 方法中执行
+
+最后服务器关闭时，才会销毁这个 servlet 对象，执行 destroy() 方法。</code></pre><p>5、Tomcat装载Servlet的三种情况<br>    （1）Servlet容器启动时自动装载某些Servlet，实现它只需要在web.xml文件中的 <servlet></servlet> 之间添加以下代码：<br>    <load-on-startup>1</load-on-startup><br>　　其中，数字越小表示优先级越高。<br>    （2）客户端首次向某个Servlet发送请求<br>    （3）Servlet被修改后，Tomcat容器会重新装载Servlet<br>6、Jsp和Servlet的区别<br>    （1）不同之处：<br>    Servlet 在 Java 代码中通过 HttpServletResponse 对象动态输出 HTML 内容<br>    JSP 在静态 HTML 内容中嵌入 Java 代码，Java 代码被动态执行后生成 HTML 内容<br>    （2）各自特点<br>    Servlet 能够很好地组织业务逻辑代码，但是在 Java 源文件中通过字符串拼接的方式生成动态 HTML 内容会导致代码维护困难、可读性差<br>    JSP 虽然规避了 Servlet 在生成 HTML 内容方面的劣势，但是在 HTML 中混入大量、复杂的业务逻辑同样也是不可取的<br>    （3）通过MVC双剑合璧<br>        a.Web 浏览器发送 HTTP 请求到服务端，被 Controller(Servlet) 获取并进行处理（例如参数解析、请求转发）<br>        b.Controller(Servlet) 调用核心业务逻辑——Model部分，获得结果<br>        c.Controller(Servlet) 将逻辑处理结果交给 View（JSP），动态输出 HTML 内容<br>        d.动态生成的 HTML 内容返回到浏览器显示</p>
+<pre><code>MVC 模式在 Web 开发中的好处是非常明显，它规避了 JSP 与 Servlet 各自的短板，Servlet 只负责业务逻辑而不会通过 out.append() 动态生成 HTML 代码；JSP 中也不会充斥着大量的业务代码。这大大提高了代码的可读性和可维护性。</code></pre><p>7、tomcat和Servlet联系<br>    Tomcat是Web应用服务器，是一个Servlet/JSP容器。Tomcat 作为 Servlet 容器，负责处理客户请求，把请求传送给Servlet，并将Servlet的响应传送回给客户。而 Servlet 是一种运行在支持 Java 语言的服务器上的组件。Servlet最常见的用途是扩展 Java Web 服务器功能，提供非常安全的，可移植的，易于使用的CGI替代品。</p>
+<pre><code>Tomcat 将 http 请求文本接收并解析，然后封装成 HttpServletRequest 类型的 request 对象，所有的 HTTP 头数据读可以通过 request 对象调用对应的方法查询到。
+Tomcat 同时会要响应的信息封装为 HttpServletResponse 类型的 response 对象，通过设置 response 属性就可以控制要输出到浏览器的内容，然后将 response 交给 tomcat，tomcat 就会将其变成响应文本的格式发送给浏览器</code></pre><p>8、cookie和session的区别<br>    由于 HTTP 协议是无状态的协议，所以服务端需要记录用户的状态时，就需要用某种机制来识具体的用户，这个机制就是 Session。典型的场景比如购物车，当你点击下单按钮时，由于 HTTP 协议无状态，所以并不知道是哪个用户操作的，所以服务端要为特定的用户创建了特定的 Session，用用于标识这个用户，并且跟踪用户，这样才知道购物车里面有几本书。这个 Session 是保存在服务端的，有一个唯一标识。在服务端保存Session 的方法很多，内存、数据库、文件都有。集群的时候也要考虑 Session 的转移，在大型的网站，一般会有专门的 Session 服务器集群，用来保存用户会话，这个时候 Session 信息都是放在内存的，使用一些缓存服务比如 Memcached 之类的来放 Session。</p>
+<pre><code>每次 HTTP 请求的时候，客户端都会发送相应的 Cookie 信息到服务端。实际上大多数的应用都是用 Cookie 来实现 Session 跟踪的，第一次创建 Session 的时候，服务端会在 HTTP 协议中告诉客户端，需要在 Cookie 里面记录一个Session ID，以后每次请求把这个会话 ID 发送到服务器，我就知道你是谁了。有人问，如果客户端的浏览器禁用了 Cookie 怎么办？一般这种情况下，会使用一种叫做URL重写的技术来进行会话跟踪，即每次 HTTP 交互，URL后面都会被附加上一个诸如 sid=xxxxx 这样的参数，服务端据此来识别用户。
+
+
+总结一下：
+    Session 是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中；
+    Cookie 是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现 Session 的一种方式。</code></pre><p>9、JavaEE中的三层结构和MVC<br>10、RESTful架构<br>    什么是REST<br>        可以总结为一句话：REST 是所有 Web 应用都应该遵守的架构设计指导原则。 Representational State Transfer，翻译是”表现层状态转化”。 面向资源是 REST 最明显的特征，对于同一个资源的一组不同的操作。资源是服务器上一个可命名的抽象概念，资源是以名词为核心来组织的，首先关注的是名词。REST要求，必须通过统一的接口来对资源执行各种操作。对于每个资源只能执行一组有限的操作。（7个HTTP方法：GET/POST/PUT/DELETE/PATCH/HEAD/OPTIONS）<br>二、Spring<br>1、Spring IOC、AOP的理解、实现的原理，以及优点<br>    Spring的IoC容器是Spring的核心，Spring AOP是spring框架的重要组成部分</p>
+<pre><code>IOC
+    正常的情况下，比如有一个类，在类里面有方法（不是静态的方法），调用类里面的方法，创建类的对象，使用对象调用方法，创建类对象的过程，需要new出来对象
+    通过控制反转，把对象的创建不是通过new方式实现，而是交给Spring配置创建类对象
+
+Spring IOC实现原理
+    创建xml配置文件，配置要创建的对象类
+    通过反射创建实例；
+    获取需要注入的接口实现类并将其赋值给该接口
+
+AOP
+    在程序开发中主要用来解决一些系统层面上的问题，比如日志，事务，权限等待
+Spring AOP实现原理
+    动态代理（利用反射和动态编译将代理模式变成动态的）
+    JDK的动态代理
+    cglib动态代理</code></pre><p>2、什么是依赖注入，注入的方式有哪些<br>    DI（依赖注入）<br>        所谓依赖注入，就是把底层类作为参数传入上层类，实现上层类对下层类的控制。DI依赖注入，向类里面属性注入值 ，依赖注入不能单独存在，需要在IOC基础上完成操作。<br>        使用set方法注入<br>        使用有参构造注入<br>        使用接口注入<br>        注解注入(@Autowire)<br>3、BeanFactory和ApplicationContext的区别<br>BeanFactory<br>是Spring里面最低层的接口，提供了最简单的容器的功能，只提供了实例化对象和拿对象的功能。</p>
+<p>两者装载bean的区别<br>BeanFactory：在启动的时候不会去实例化Bean，中有从容器中拿Bean的时候才会去实例化；<br>ApplicationContext：在启动的时候就把所有的Bean全部实例化了。它还可以为Bean配置lazy-init=true来让Bean延迟实例化；<br>我们该用BeanFactory还是ApplicationContent<br>BeanFactory 延迟实例化的优点：</p>
+<p>应用启动的时候占用资源很少，对资源要求较高的应用，比较有优势；</p>
+<p>缺点：速度会相对来说慢一些。而且有可能会出现空指针异常的错误，而且通过bean工厂创建的bean生命周期会简单一些</p>
+<p>ApplicationContext 不延迟实例化的优点：</p>
+<p>所有的Bean在启动的时候都加载，系统运行的速度快；<br>在启动的时候所有的Bean都加载了，我们就能在系统启动的时候，尽早的发现系统中的配置问题<br>建议web应用，在启动的时候就把所有的Bean都加载了。<br>缺点：把费时的操作放到系统启动中完成，所有的对象都可以预加载，缺点就是消耗服务器的内存</p>
+<p>二、SpringMVC<br>1、SpringMVC工作原理<br>① 客户端的所有请求都交给前端控制器DispatcherServlet来处理，它会负责调用系统的其他模块来真正处理用户的请求。 <br>② DispatcherServlet收到请求后，将根据请求的信息（包括URL、HTTP协议方法、请求头、请求参数、Cookie等）以及HandlerMapping的配置找到处理该请求的Handler（任何一个对象都可以作为请求的Handler）。 <br>③ 在这个地方Spring会通过HandlerAdapter对该处理进行封装。 <br>④ HandlerAdapter是一个适配器，它用统一的接口对各种Handler中的方法进行调用。 <br>⑤ Handler完成对用户请求的处理后，会返回一个ModelAndView对象给DispatcherServlet，ModelAndView顾名思义，包含了数据模型以及相应的视图的信息。 <br>⑥ ModelAndView的视图是逻辑视图，DispatcherServlet还要借助ViewResolver完成从逻辑视图到真实视图对象的解析工作。 <br>⑦ 当得到真正的视图对象后，DispatcherServlet会利用视图对象对模型数据进行渲染。 <br>⑧ 客户端得到响应，可能是一个普通的HTML页面，也可以是XML或JSON字符串，还可以是一张图片或者一个PDF文件。</p>
+<p>组件及其作用<br>    （1）前端控制器 (DispatcherServlet)<br>        接收请求，响应结果，相当于转发器，中央处理器。负责调用系统的其他模块来真正处理用户的请求。 <br>        有了DispatcherServlet减少了其他组件之间的耦合度</p>
+<pre><code>（2）处理器映射器 (HandlerMapping)
+    作用：根据请求的 url 查找 Handler
+
+（3）处理器 (Handler)
+    注意：编写 Handler 时按照 HandlerAdapter 的要求去做，这样适配器才可以去正确执行 Handler
+
+（4）处理器适配器 (HandlerAdapter)
+    作用：按照特定规则（HandlerAdapter要求的规则）执行Handler。
+（5）视图解析器 (ViewResolver)
+    作用：进行视图解析，根据逻辑视图解析成真正的视图 (View)
+（6）视图 (View)
+    View 是一个接口实现类支持不同的 View 类型（jsp,pdf等等）
+
+注意：只需要程序员开发，处理器和视图。</code></pre>
+      
+    </div>
+    
+      <footer class="article-footer">
+        完
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  <div class="article-nav-block">
+    
+  </div>
+  <div class="article-nav-block">
+    
+      <a href="/posts/uncategorized/2019-08-08-Java虚拟机.html" id="article-nav-older" class="article-nav-link-wrap">
+        <div class="article-nav-title">Java虚拟机</div>
+        <strong class="article-nav-caption"></strong>
+      </a>
+    
+  </div>
+</nav>
+
+    
+<div id="gitmentContainer"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: '',
+  repo: '',
+  oauth: {
+    client_id: '',
+    client_secret: '',
+  },
+})
+gitment.render('gitmentContainer')
+</script>
+
+  
+  
+</article>
+</section>
+        <aside id="sidebar">
+  
+    <div class="widget-box">
+  <div class="avatar-box">
+    <img class="avatar" src="/images/default-avatar.webp" title="图片来自网络"></img>
+    <h3 class="avatar-name">
+      
+        天佑昨日
+      
+    </h3>
+    <p class="avatar-slogan">
+      明日不可求 幸得昨日来
+    </p>
+  </div>
+</div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/历史/">历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构与算法/">数据结构与算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/历史/" style="font-size: 10px;">历史</a> <a href="/tags/数据结构与算法/" style="font-size: 15px;">数据结构与算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-box">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/posts/技术/2019-08-08-Java-Web.html">Java Web</a>
+          </li>
+        
+          <li>
+            <a href="/posts/uncategorized/2019-08-08-Java虚拟机.html">Java虚拟机</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-07-Java-IOO.html">Java IO</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-06-Java并发编程.html">Java并发编程</a>
+          </li>
+        
+          <li>
+            <a href="/posts/技术/2019-08-06-Java集合框架.html">Java集合框架</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+      <div class="widget-box">
+    <h3 class="widget-title">友链</h3>
+    <div class="widget">
+      
+        <a style="display: block;" href="https://dretrtg.github.io/" title target='_blank'
+        >dretrtg</a>
+      
+    </div>
+  </div>
+
+  
+</aside>
+      </div>
+      <footer id="footer">
+  <div class="foot-box global-width">
+    &copy; 2019 dretrtg &nbsp;&nbsp;
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    &nbsp;|&nbsp;主题 <a href="https://github.com/yiluyanxia/hexo-theme-antiquity">antiquity</a>
+    <br>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span id="busuanzi_container_site_pv">不蒜子告之   阁下是第<span id="busuanzi_value_site_pv"></span>个访客</span>
+  </div>
+</footer>
+      <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+<script>
+if (!window.jQuery) {
+var script = document.createElement('script');
+script.src = "/js/jquery-2.0.3.min.js";
+document.body.write(script);
+}
+</script>
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+    </div>
+    <nav id="mobile-nav" class="mobile-nav-box">
+  <div class="mobile-nav-img mobile-nav-top"></div>
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+  <div class="mobile-nav-img  mobile-nav-bottom"></div>
+</nav>    
+  </div>
+</body>
+</html>
